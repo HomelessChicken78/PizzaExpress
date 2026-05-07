@@ -18,7 +18,7 @@ public class Ordine {
     private String codice;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "fk_pizza", nullable = false)
+    @JoinColumn(name = "fk_pizza_ord", nullable = false)
     private Collection<ordinepizza> pizzeOrdinate;
 
     @ManyToOne
