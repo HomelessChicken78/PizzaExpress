@@ -9,5 +9,5 @@ public interface PizzaService {
 
     public PizzaDTO cercaPizza(Long idPizza);
 
-    public PizzaDTO modificaPizza(PizzaDTO nuovaPizza);
+    public PizzaDTO modificaPizza(Long idPizza, PizzaDTO nuovaPizza);
 }
