@@ -19,7 +19,7 @@ public class Ordine {
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "fk_pizza_ord", nullable = false)
-    private Collection<ordinepizza> pizzeOrdinate;
+    private Collection<OrdinePizza> pizzeOrdinate;
 
     @ManyToOne
     @JoinColumn(name = "fk_rider")
