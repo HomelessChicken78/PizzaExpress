@@ -43,7 +43,7 @@ public class OrdineServiceImpl implements OrdineService {
         cercaOrdine(idCliente, codiceOrdine);
         Ordine saved = repositoryOrdine.save(mapper.toEntity(ordineCambiato));
 
-        return null;
+        return mapper.toDTO(saved);
     }
 
     @Override
