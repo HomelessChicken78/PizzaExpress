@@ -1,6 +1,8 @@
 package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.RiderDTO;
+import it.itsacademy.pizzeriaexpress.entity.Rider;
+import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.RiderRepository;
 import it.itsacademy.pizzeriaexpress.utility.mapper.RiderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +19,31 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public RiderDTO registraRider(RiderDTO nuovoRider) {
-        return null;
+        Rider saved = repositoryRider.save(mapper.toEntity(nuovoRider));
+
+        return mapper.toDTO(saved);
     }
 
     @Override
-    public RiderDTO licensiaRider(Long idRider) {
-        return null;
+    public RiderDTO licenziaRider(Long idRider) {
+        RiderDTO trovato = cercaRider(idRider);
+
+        repositoryRider.deleteById(idRider);
+
+        return trovato;
     }
 
     @Override
     public RiderDTO cercaRider(Long idRider) {
-        return null;
+        Rider trovato = repositoryRider.findById(idRider).orElseThrow(
+                () -> new NotFoundException("Non è stato possibile trovare un Rider con id " + idRider)
+        );
+
+        return mapper.toDTO(trovato);
     }
 
     @Override
     public Collection<RiderDTO> tuttiIRider() {
-        return List.of();
+        return mapper.toDTO(repositoryRider.findAll());
     }
 }
