@@ -50,6 +50,7 @@ public class PizzaServiceImpl implements PizzaService {
     @Override
     public PizzaDTO modificaPizza(Long idPizza, PizzaDTO nuovaPizza) {
         nuovaPizza.setIdPizza(idPizza);
+        cercaPizza(idPizza);
         Pizza saved = repositoryPizza.save(mapper.toEntity(nuovaPizza));
         return mapper.toDTO(saved);
     }
