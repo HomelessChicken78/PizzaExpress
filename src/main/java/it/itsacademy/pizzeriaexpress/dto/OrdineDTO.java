@@ -3,6 +3,8 @@ package it.itsacademy.pizzeriaexpress.dto;
 import it.itsacademy.pizzeriaexpress.entity.Rider;
 import lombok.*;
 
+import java.util.Collection;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
