@@ -1,12 +1,9 @@
 package it.itsacademy.pizzeriaexpress.service;
 
-import it.itsacademy.pizzeriaexpress.dto.OrdineDTO;
-import it.itsacademy.pizzeriaexpress.dto.OrdinePizzaDTO;
-import it.itsacademy.pizzeriaexpress.dto.PizzaDTO;
-import it.itsacademy.pizzeriaexpress.entity.Ordine;
-import it.itsacademy.pizzeriaexpress.entity.Pizza;
+import it.itsacademy.pizzeriaexpress.dto.*;
+import it.itsacademy.pizzeriaexpress.entity.*;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
-import it.itsacademy.pizzeriaexpress.repository.OrdineRepository;
+import it.itsacademy.pizzeriaexpress.repository.*;
 import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,32 +18,49 @@ public class OrdineServiceImpl implements OrdineService {
     OrdineRepository repositoryOrdine;
 
     @Autowired
+    ClienteRepository repositoryCliente;
+
+    @Autowired
     PizzaService pizzaService;
 
     @Autowired
     OrdineMapper mapper;
 
     @Override
-    public OrdineDTO creaOrdine(OrdineDTO nuovoOrdine) {
-        Ordine saved = repositoryOrdine.save(mapper.toEntity(nuovoOrdine));
+    public OrdineDTO creaOrdine(Long idCliente, OrdineDTO nuovoOrdine) {
+        Cliente clienteOrditore = repositoryCliente.findById(idCliente).orElseThrow(
+                () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
+        ); // prendi l'entity in stato managed
+        Ordine saved = repositoryOrdine.save(mapper.toEntity(nuovoOrdine)); // salva l'ordine, senza il suo cliente
+        clienteOrditore.getOrdini().add(saved); // collega il cliente al suo nuovo ordine
 
         return mapper.toDTO(saved);
     }
 
     @Override
-    public OrdineDTO modificaOrdine(String codiceOrdine, OrdineDTO ordineCambiato) {
+    public OrdineDTO modificaOrdine(Long idCliente, String codiceOrdine, OrdineDTO ordineCambiato) {
         ordineCambiato.setCodice(codiceOrdine);
-        cercaOrdine(codiceOrdine);
+        cercaOrdine(idCliente, codiceOrdine);
         Ordine saved = repositoryOrdine.save(mapper.toEntity(ordineCambiato));
 
         return null;
     }
 
     @Override
-    public OrdineDTO cercaOrdine(String codiceOrdine) {
-        Ordine trovato = repositoryOrdine.findById(codiceOrdine).orElseThrow(
-                () -> new NotFoundException("Non è stato possibile trovare un ordine con codice: " + codiceOrdine)
+    public OrdineDTO cercaOrdine(Long idCliente, String codiceOrdine) {
+        // cerca il cliente
+        Cliente clienteOrditore = repositoryCliente.findById(idCliente).orElseThrow(
+                () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
         );
+
+        // se viene trovato cerca se tra i suoi ordini ha un ordine con codice = codiceOrdine
+        Ordine trovato = clienteOrditore.getOrdini().stream()
+                .filter(ord -> ord.getCodice().equals(codiceOrdine))
+                .findFirst()
+                .orElseThrow(
+                        () -> new NotFoundException("Non è stato possibile trovare un ordine con codice "
+                                + codiceOrdine + "del Cliente con id " + idCliente)
+                );
 
         return mapper.toDTO(trovato);
     }
@@ -57,9 +71,9 @@ public class OrdineServiceImpl implements OrdineService {
     }
 
     @Override
-    public OrdineDTO aggiungiPizza(String codiceOrdine, Long idPizza, Integer quantita) {
+    public OrdineDTO aggiungiPizza(Long idCliente, String codiceOrdine, Long idPizza, Integer quantita) {
         PizzaDTO pizza = pizzaService.cercaPizza(idPizza);
-        OrdineDTO ordine = cercaOrdine(codiceOrdine);
+        OrdineDTO ordine = cercaOrdine(idCliente, codiceOrdine);
         ordine.getPizzeOrdinate().add(
                 new OrdinePizzaDTO(quantita, pizza)
         );
