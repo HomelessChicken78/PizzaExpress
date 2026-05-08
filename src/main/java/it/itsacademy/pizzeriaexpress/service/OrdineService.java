@@ -7,7 +7,7 @@ import java.util.Collection;
 public interface OrdineService {
     public OrdineDTO creaOrdine(OrdineDTO nuovoOrdine);
 
-    public OrdineDTO modificaOrdine(OrdineDTO ordineCambiato);
+    public OrdineDTO modificaOrdine(String codiceOrdine, OrdineDTO ordineCambiato);
 
     public OrdineDTO cercaOrdine(String codiceOrdine);
 
