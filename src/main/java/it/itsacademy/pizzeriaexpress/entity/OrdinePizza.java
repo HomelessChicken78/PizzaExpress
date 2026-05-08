@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "ordine_pizza")
-public class ordinepizza {
+public class OrdinePizza {
     @Id
     private Long id;
 
