@@ -222,7 +222,6 @@ public class OrdineServiceTest {
         PizzaDTO pizzaCreataDTO = new PizzaDTO(11L, "Margherita", "Pomodoro, Mozzarella, Basilico", 9.00);
 
         // Creazione ordine iniziale
-        OrdineDTO ordineIniziale = new OrdineDTO("LOL", new ArrayList<>(), null);
         Ordine ordineInizialeEntity = new Ordine("LOL", new ArrayList<>(), null);
 
         // Creazione del Cliente che la repository di cliente ritornerà
