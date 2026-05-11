@@ -111,17 +111,60 @@ public class OrdineServiceTest {
 
     @Test
     public void testCercaOrdineEsistente() {
+        // Creazione nuovo Ordine + Rider per il Cliente
+        Rider riderOrdine = new Rider(30L, "Simone Dragoncelli");
+        Ordine ordineCercato = new Ordine("123", new ArrayList<>(), riderOrdine);
 
+        // Creazione del Cliente che la repository di cliente ritornerà
+        Cliente clienteTrovato = new Cliente();
+        clienteTrovato.setIdCliente(1L);
+        clienteTrovato.setNome("Mario Mela");
+        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
+        clienteTrovato.setTelefono("337596639");
+
+        // Collega l'ordine al Cliente
+        ArrayList<Ordine> ordiniCliente = new ArrayList<>();
+        ordiniCliente.add(ordineCercato);
+        clienteTrovato.setOrdini(ordiniCliente);
+
+        // Stubbing del metodo della repository
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
+
+        // Chiamata metodo da testare
+        OrdineDTO risultato = ordineService.cercaOrdine(1L, "123");
+
+        // Verifiche
+        assertNotNull(risultato);
+        assertEquals("123", risultato.getCodice());
+        assertNotNull(risultato.getRider());
+        assertEquals(30L, risultato.getRider().getIdRider());
+        verify(clienteRepository, times(1)).findById(any(Long.class));
     }
 
     @Test
     public void testCercaOrdineInesistente() {
+        // Creazione del Cliente che la repository di cliente ritornerà
+        Cliente clienteTrovato = new Cliente();
+        clienteTrovato.setIdCliente(124L);
+        clienteTrovato.setNome("Mario Mela");
+        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
+        clienteTrovato.setTelefono("337596639");
+        clienteTrovato.setOrdini(new ArrayList<>());
 
+        // Stubbing del metodo della repository
+        when(clienteRepository.findById(124L)).thenReturn(Optional.of(clienteTrovato));
+
+        // Verifica
+        assertThrows(NotFoundException.class, () -> {ordineService.cercaOrdine(124L, "CIAO");});
     }
 
     @Test
     public void testCercaOrdineClienteNonEsiste() {
+        // Stubbing del metodo della repository
+        when(clienteRepository.findById(564L)).thenReturn(Optional.empty());
 
+        // Verifica
+        assertThrows(NotFoundException.class, () -> {ordineService.cercaOrdine(564L, "123");});
     }
 
     @Test
