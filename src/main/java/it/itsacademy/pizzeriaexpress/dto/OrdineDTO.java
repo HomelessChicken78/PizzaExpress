@@ -13,5 +13,5 @@ public class OrdineDTO {
 
     private Collection<OrdinePizzaDTO> pizzeOrdinate;
 
-    private Rider rider;
+    private RiderDTO rider;
 }
