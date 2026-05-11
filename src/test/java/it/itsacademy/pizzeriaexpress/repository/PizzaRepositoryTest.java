@@ -1,6 +1,7 @@
 package it.itsacademy.pizzeriaexpress.repository;
 
 import it.itsacademy.pizzeriaexpress.entity.Pizza;
+import jakarta.persistence.EntityManager;
 import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,16 @@ public class PizzaRepositoryTest {
     @Autowired
     private PizzaRepository pizzaRepository;
 
+    // Permette di interagire con il contesto di persistenza
+    @Autowired
+    private EntityManager entityManager;
+
     @BeforeEach
     public void datiIniziali() {
+        // Resetta l'auto increment attraverso una query nativa
+        entityManager.createNativeQuery("ALTER TABLE pizza AUTO_INCREMENT = 1").executeUpdate();
+
+        // Aggiungi da capo le pizze
         Pizza pizza1 = new Pizza(null, "Diavola", "Pomodoro, mozzarella e salame piccante", 8.50);
         Pizza pizza2 = new Pizza(null, "Quattro Formaggi", "Mozzarella, gorgonzola, fontina e parmigiano", 9.50);
         Pizza pizza3 = new Pizza(null, "Capricciosa", "Pomodoro, mozzarella, prosciutto cotto, funghi, carciofi e olive", 9.00);
