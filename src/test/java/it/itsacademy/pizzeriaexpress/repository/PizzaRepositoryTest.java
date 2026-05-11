@@ -48,7 +48,6 @@ public class PizzaRepositoryTest {
 
     @Test
     public void testPizzaCancella() {
-        System.out.println(pizzaRepository.findAll()); // auto-increment non viene resettato tra i test
         Pizza pizza = new Pizza();
         pizza.setNome("Margherita");
         pizza.setDescrizione("Pomodoro, Mozzarella, Basilico");
