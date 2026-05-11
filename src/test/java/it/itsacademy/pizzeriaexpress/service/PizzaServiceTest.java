@@ -61,4 +61,45 @@ public class PizzaServiceTest {
         when(pizzaRepository.findAll()).thenReturn(listaPizzeNellaRepository);
         assertEquals(pizzaService.tutteLePizze(), risultatoAttesoListaPizze);
     }
+
+    @Test
+    public void testCreaPizza() {
+        PizzaDTO margherita = new PizzaDTO(10L, "Margherita", "Pomodoro, Mozzarella", 7.50);
+        Pizza margheritaEntity = new Pizza(1L, "Margherita", "Pomodoro, Mozzarella", 7.50);
+
+        when(pizzaRepository.save(pizzaMapper.toEntity(margherita))).thenReturn(margheritaEntity);
+
+        PizzaDTO pizzaCreata = pizzaService.creaPizza(margherita);
+
+        assertEquals(pizzaCreata.getIdPizza(), margheritaEntity.getIdPizza());
+        assertEquals(pizzaCreata.getNome(), margheritaEntity.getNome());
+    }
+
+    @Test
+    public void testEliminaPizzaRitornaPizza() {
+        when(pizzaRepository.findById(1L)).thenReturn(Optional.of(new Pizza(1L, "Margherita", "Pomodoro, Mozzarella", 7.50)));
+        assertEquals(1L, pizzaService.eliminaPizza(1L).getIdPizza());
+    }
+
+    @Test
+    public void testEliminaMaNonEsiste() {
+        when(pizzaRepository.findById(123L)).thenReturn(Optional.empty());
+        assertThrows(NotFoundException.class, () -> {pizzaService.eliminaPizza(123L);});
+    }
+
+    @Test void testModificaPizza() {
+        Long idOriginale = 1L;
+        Pizza pizzaOriginale = new Pizza(idOriginale, "Funghi Porcini", "Non lo so", 70.20);
+        PizzaDTO pizzaModificata = new PizzaDTO(93L, "Margherita", "Pomodoro, Mozzarella", 7.50);
+        Pizza pizzaSalvata = new Pizza(idOriginale, "Margherita", "Pomodoro, Mozzarella", 7.50);
+
+        when(pizzaRepository.findById(idOriginale)).thenReturn(Optional.of(pizzaOriginale));
+        when(pizzaRepository.save(any(Pizza.class))).thenReturn(pizzaSalvata);
+
+        PizzaDTO result = pizzaService.modificaPizza(idOriginale, pizzaModificata);
+
+        assertEquals(idOriginale, result.getIdPizza());
+        assertEquals("Margherita", result.getNome());
+        assertEquals(7.5, result.getPrezzo());
+    }
 }
