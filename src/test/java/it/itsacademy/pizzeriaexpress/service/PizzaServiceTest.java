@@ -23,7 +23,7 @@ public class PizzaServiceTest {
     private PizzaRepository pizzaRepository; // non è la vera repository, non si connette col db
 
     @Spy /* Questo fa si che uso il mapper vero.
-    uso il mapper vero, perchè la logica è semplice e la dipendenza con il mapper è troppo stressa
+    Uso il mapper vero, perchè la logica è semplice e la dipendenza con il mapper è troppo stressa
     per esser mockata: tutte le funzioni della service usano il mapper almeno nel return devi usare la new*/
     private PizzaMapper pizzaMapper = new PizzaMapperImpl();
 
