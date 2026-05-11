@@ -57,16 +57,17 @@ public class PizzaRepositoryTest {
 
     @Test
     public void testPizzaCancella() {
-        Pizza pizza = new Pizza();
-        pizza.setNome("Margherita");
-        pizza.setDescrizione("Pomodoro, Mozzarella, Basilico");
-        pizza.setPrezzo(5.99);
-        Pizza savedPizza = pizzaRepository.save(pizza);
 
-        Long idNuovaPizza = savedPizza.getIdPizza();
+        assertTrue(pizzaRepository.findById(1L).isPresent());
+        pizzaRepository.deleteById(1L);
+        assertTrue(pizzaRepository.findById(1L).isEmpty());
+    }
 
-        assertTrue(pizzaRepository.findById(idNuovaPizza).isPresent());
-        pizzaRepository.deleteById(idNuovaPizza);
-        assertTrue(pizzaRepository.findById(idNuovaPizza).isEmpty());
+    @Test
+    public void testCercaPizza() {
+        Pizza pizza = pizzaRepository.findById(1L).orElse(null);
+
+        assertNotNull(pizza);
+        assertEquals("Diavola", pizza.getNome());
     }
 }
