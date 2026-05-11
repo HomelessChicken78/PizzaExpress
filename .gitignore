@@ -1,5 +1,5 @@
 .env
-test/resources/application.properties
+src/test/resources/application.properties
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
