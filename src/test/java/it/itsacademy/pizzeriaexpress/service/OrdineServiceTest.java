@@ -2,6 +2,7 @@ package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.*;
 import it.itsacademy.pizzeriaexpress.entity.*;
+import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.ClienteRepository;
 import it.itsacademy.pizzeriaexpress.repository.OrdineRepository;
@@ -84,6 +85,9 @@ public class OrdineServiceTest {
         clienteTrovato.setTelefono("337596639");
         clienteTrovato.setOrdini(new ArrayList<>());
 
+        // Creazione dell'OrdinePizza e della Pizza correlati
+        // TODO
+
         // Stubbing dei metodi delle repository
         when(ordineRepository.save(any(Ordine.class))).thenReturn(nuovoOrdine);
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
@@ -107,6 +111,35 @@ public class OrdineServiceTest {
         // Verifica
         assertThrows(NotFoundException.class, () -> {ordineService.creaOrdine(1L, ordineDaCreare);});
     }
+
+    @Test
+    public void testCreaOrdineSenzaPizze() {
+        // Creazione nuovo Ordine + Rider per lo stubbing del metodo ordineRepository.save
+        Rider riderOrdine = new Rider(1L, "Simone Dragoncelli");
+        Ordine nuovoOrdine = new Ordine("123", new ArrayList<>(), riderOrdine);
+
+        // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
+        RiderDTO riderOrdineDaCreare = new RiderDTO(1L, "Simone Dragoncelli");
+        OrdineDTO ordineDaCreare = new OrdineDTO("123", null, riderOrdineDaCreare);
+
+        // Creazione del Cliente che la repository di cliente ritornerà
+        Cliente clienteTrovato = new Cliente();
+        clienteTrovato.setIdCliente(1L);
+        clienteTrovato.setNome("Mario Mela");
+        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
+        clienteTrovato.setTelefono("337596639");
+        clienteTrovato.setOrdini(new ArrayList<>());
+
+        // Tralasciamo di proposito la creazione della Pizza e dell'OrdinePizza
+
+        // Stubbing dei metodi delle repository
+        // Non c'è bisogno di fare lo stubbing del repositoryOrdine.save perché lancia l'exception prima
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
+
+        assertThrows(BadRequestException.class, () -> {ordineService.creaOrdine(1L, ordineDaCreare);}
+        , "La service non esegue il controllo del fatto che un ordine non può non avere pizze oppure lancia l'eccezione sbagliata");
+    }
+
 
     @Test
     public void testModificaOrdine() {
