@@ -27,7 +27,7 @@ public class OrdineRepositoryTest {
     private PizzaRepository pizzaRepository;
 
     @Test
-    public void testRiderSave() {
+    public void testOrdineSave() {
         Pizza margherita = new Pizza();
         margherita.setNome("Margherita");
         margherita.setDescrizione("Molto buona");
