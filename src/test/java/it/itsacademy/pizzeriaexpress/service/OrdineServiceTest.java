@@ -225,17 +225,13 @@ public class OrdineServiceTest {
     @Test
     public void testAggiungiPizzaAllOrdine() {
         // DTO della pizza da aggiungere
-        PizzaDTO pizzaCreataDTO = new PizzaDTO(11L, "Margherita", "Pomodoro, Mozzarella, Basilico", 9.00);
+        PizzaDTO pizzaCreataDTO = creaNuovaPizzaDTO(11L, "Margherita");
 
         // Creazione ordine iniziale
-        Ordine ordineInizialeEntity = new Ordine("LOL", new ArrayList<>(), null);
+        Ordine ordineInizialeEntity = creaOrdineEntity("LOL",null, new ArrayList<>());
 
         // Creazione del Cliente che la repository di cliente ritornerà
-        Cliente clienteTrovato = new Cliente();
-        clienteTrovato.setIdCliente(1L);
-        clienteTrovato.setNome("Mario Mela");
-        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
-        clienteTrovato.setTelefono("337596639");
+        Cliente clienteTrovato = creaNuovoCliente(1L, "Pierre Il Grande");
 
         // Collega l'ordine al Cliente
         ArrayList<Ordine> ordiniCliente = new ArrayList<>();
