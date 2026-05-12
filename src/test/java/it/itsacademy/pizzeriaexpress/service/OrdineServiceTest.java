@@ -197,17 +197,12 @@ public class OrdineServiceTest {
     @Test
     public void testCercaOrdineInesistente() {
         // Creazione del Cliente che la repository di cliente ritornerà
-        Cliente clienteTrovato = new Cliente();
-        clienteTrovato.setIdCliente(124L);
-        clienteTrovato.setNome("Mario Mela");
-        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
-        clienteTrovato.setTelefono("337596639");
-        clienteTrovato.setOrdini(new ArrayList<>());
+        Cliente clienteTrovato = creaNuovoCliente(124L, "Leandro Impazienza");
 
         // Stubbing del metodo della repository
         when(clienteRepository.findById(124L)).thenReturn(Optional.of(clienteTrovato));
 
-        // Verifica
+        // Verifiche
         assertThrows(NotFoundException.class, () -> ordineService.cercaOrdine(124L, "CIAO"));
     }
 
