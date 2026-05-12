@@ -73,10 +73,6 @@ public class OrdineServiceTest {
         Rider riderOrdine = new Rider(1L, "Simone Dragoncelli");
         Ordine nuovoOrdine = new Ordine("123", new ArrayList<>(), riderOrdine);
 
-        // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
-        RiderDTO riderOrdineDaCreare = new RiderDTO(1L, "Simone Dragoncelli");
-        OrdineDTO ordineDaCreare = new OrdineDTO("123", null, riderOrdineDaCreare);
-
         // Creazione del Cliente che la repository di cliente ritornerà
         Cliente clienteTrovato = new Cliente();
         clienteTrovato.setIdCliente(1L);
@@ -86,7 +82,20 @@ public class OrdineServiceTest {
         clienteTrovato.setOrdini(new ArrayList<>());
 
         // Creazione dell'OrdinePizza e della Pizza correlati
-        // TODO
+        PizzaDTO margherita = new PizzaDTO();
+        margherita.setNome("Margherita");
+        margherita.setDescrizione("Molto buona");
+        margherita.setPrezzo(9.0);
+
+        OrdinePizzaDTO op = new OrdinePizzaDTO();
+        op.setQuantita(2);
+        op.setPizza(margherita);
+        Collection<OrdinePizzaDTO> pizzeOrdinate = new ArrayList<>();
+        pizzeOrdinate.add(op);
+
+        // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
+        RiderDTO riderOrdineDaCreare = new RiderDTO(1L, "Simone Dragoncelli");
+        OrdineDTO ordineDaCreare = new OrdineDTO("123", pizzeOrdinate, riderOrdineDaCreare);
 
         // Stubbing dei metodi delle repository
         when(ordineRepository.save(any(Ordine.class))).thenReturn(nuovoOrdine);
