@@ -9,7 +9,6 @@ import it.itsacademy.pizzeriaexpress.utility.mapper.ClienteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
-import java.util.List;
 
 public class ClienteServiceImpl implements ClienteService {
     @Autowired
