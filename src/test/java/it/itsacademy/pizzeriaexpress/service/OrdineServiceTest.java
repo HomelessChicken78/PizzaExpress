@@ -67,6 +67,31 @@ public class OrdineServiceTest {
         );
     }
 
+    // Metodi privati per semplificare il codice
+
+    private Cliente creaNuovoCliente(Long id, String nome) {
+        Cliente nuovoCliente = new Cliente();
+        nuovoCliente.setIdCliente(id);
+        nuovoCliente.setNome(nome);
+        nuovoCliente.setIndirizzo("Via Coccodrilli 42, Fiumicino");
+        nuovoCliente.setTelefono("337596639");
+        nuovoCliente.setOrdini(new ArrayList<>());
+        return nuovoCliente;
+    }
+
+    private PizzaDTO creaNuovaPizzaDTO(Long id, String nome) {
+        return new PizzaDTO(id, nome, "Molto buona", 9.0);
+    }
+
+    private OrdineDTO creaNuovoOrdineDTO(String codice, Collection<OrdinePizzaDTO> pizzeOrdinate) {
+        RiderDTO riderOrdine = new RiderDTO(1L, "Simone Dragoncelli");
+        return new OrdineDTO(codice, pizzeOrdinate, riderOrdine);
+    }
+
+    private Ordine creaOrdineEntity(String codice, Rider rider, Collection<OrdinePizza> pizzeOrdinate) {
+        return new Ordine(codice, pizzeOrdinate, rider);
+    }
+
     @Test
     public void testCreaOrdine() {
         // Creazione nuovo Ordine + Rider per lo stubbing del metodo ordineRepository.save
