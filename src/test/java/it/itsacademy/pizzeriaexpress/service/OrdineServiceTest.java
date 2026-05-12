@@ -116,7 +116,6 @@ public class OrdineServiceTest {
     public void testCreaOrdineSenzaPizze() {
         // Creazione nuovo Ordine + Rider per lo stubbing del metodo ordineRepository.save
         Rider riderOrdine = new Rider(1L, "Simone Dragoncelli");
-        Ordine nuovoOrdine = new Ordine("123", new ArrayList<>(), riderOrdine);
 
         // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
         RiderDTO riderOrdineDaCreare = new RiderDTO(1L, "Simone Dragoncelli");
