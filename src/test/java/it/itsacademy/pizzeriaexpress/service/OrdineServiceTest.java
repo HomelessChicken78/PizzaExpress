@@ -130,16 +130,8 @@ public class OrdineServiceTest {
     @Test
     public void testCreaOrdineSenzaPizze() {
         // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
-        RiderDTO riderOrdineDaCreare = new RiderDTO(1L, "Simone Dragoncelli");
-        OrdineDTO ordineDaCreare = new OrdineDTO("123", null, riderOrdineDaCreare);
-
-        // Creazione del Cliente che la repository di cliente ritornerà
-        Cliente clienteTrovato = new Cliente();
-        clienteTrovato.setIdCliente(1L);
-        clienteTrovato.setNome("Mario Mela");
-        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
-        clienteTrovato.setTelefono("337596639");
-        clienteTrovato.setOrdini(new ArrayList<>());
+        Cliente clienteTrovato = creaNuovoCliente(1L, "Marcello Muovileoni");
+        OrdineDTO ordineDaCreare = creaNuovoOrdineDTO("123", null);
 
         // Tralasciamo di proposito la creazione della Pizza e dell'OrdinePizza
 
@@ -147,8 +139,8 @@ public class OrdineServiceTest {
         // Non c'è bisogno di fare lo stubbing del repositoryOrdine.save perché lancia l'exception prima
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
 
-        assertThrows(BadRequestException.class, () -> ordineService.creaOrdine(1L, ordineDaCreare)
-        , "La service non esegue il controllo del fatto che un ordine non può non avere pizze oppure lancia l'eccezione sbagliata");
+        assertThrows(BadRequestException.class, () -> ordineService.creaOrdine(1L, ordineDaCreare),
+                "La service non esegue il controllo del fatto che un ordine non può non avere pizze oppure lancia l'eccezione sbagliata");
     }
 
 
