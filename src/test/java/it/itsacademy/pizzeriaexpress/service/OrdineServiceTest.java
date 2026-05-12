@@ -143,19 +143,14 @@ public class OrdineServiceTest {
                 "La service non esegue il controllo del fatto che un ordine non può non avere pizze oppure lancia l'eccezione sbagliata");
     }
 
-
     @Test
     public void testModificaOrdine() {
         // Creazione nuovo Ordine + Rider per il Cliente
         Rider riderOrdine = new Rider(1L, "Simone Dragoncelli");
-        Ordine vecchioOrdine = new Ordine("123", new ArrayList<>(), riderOrdine);
+        Ordine vecchioOrdine = creaOrdineEntity("123", riderOrdine, null);
 
         // Creazione del Cliente che la repository di cliente ritornerà
-        Cliente clienteTrovato = new Cliente();
-        clienteTrovato.setIdCliente(1L);
-        clienteTrovato.setNome("Mario Mela");
-        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
-        clienteTrovato.setTelefono("337596639");
+        Cliente clienteTrovato = creaNuovoCliente(1L, "Mario Mela");
 
         // Collega l'ordine al Cliente
         ArrayList<Ordine> ordiniCliente = new ArrayList<>();
@@ -163,16 +158,14 @@ public class OrdineServiceTest {
         clienteTrovato.setOrdini(ordiniCliente);
 
         // Stubbing dei metodi delle repository
-        when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArguments()[0]);
+        when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
 
         // Creazione DTO ordine modificato
         OrdineDTO ordineModificato = new OrdineDTO("NEW123", new ArrayList<>(), null);
 
-        // Chiamata metodo da testare
         OrdineDTO risultato = ordineService.modificaOrdine(1L, "123", ordineModificato);
 
-        // Verifica
         assertNotNull(risultato);
         assertEquals("123", risultato.getCodice());
         assertNull(risultato.getRider());
