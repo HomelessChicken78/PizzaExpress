@@ -105,7 +105,7 @@ public class OrdineServiceTest {
         Collection<OrdinePizzaDTO> pizzeOrdinate = new ArrayList<>();
         pizzeOrdinate.add(op);
 
-        OrdineDTO ordineDaCreare = creaNuovoOrdineDTO("123", pizzeOrdinate);
+        OrdineDTO ordineDaCreare = creaNuovoOrdineDTO("468", pizzeOrdinate);
 
         when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
@@ -115,7 +115,7 @@ public class OrdineServiceTest {
 
         // Verifiche
         assertNotNull(creato);
-        assertEquals("123", creato.getCodice());
+        assertEquals("468", creato.getCodice());
     }
 
     @Test
@@ -225,7 +225,7 @@ public class OrdineServiceTest {
     @Test
     public void testAggiungiPizzaAllOrdine() {
         // DTO della pizza da aggiungere
-        PizzaDTO pizzaCreataDTO = creaNuovaPizzaDTO(11L, "Margherita");
+        PizzaDTO pizzaCreataDTO = creaNuovaPizzaDTO(13L, "Diavola");
 
         // Creazione ordine iniziale
         Ordine ordineInizialeEntity = creaOrdineEntity("LOL",null, new ArrayList<>());
@@ -254,7 +254,7 @@ public class OrdineServiceTest {
                 .findFirst()
                 .orElseThrow();
 
-        assertEquals("Margherita", pizzaAggiunta.getPizza().getNome());
+        assertEquals("Diavola", pizzaAggiunta.getPizza().getNome());
         assertEquals(2, pizzaAggiunta.getQuantita());
 
         verify(ordineRepository).save(any(Ordine.class));
