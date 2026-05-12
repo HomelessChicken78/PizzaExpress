@@ -10,6 +10,6 @@ import lombok.*;
 @Entity
 @DiscriminatorValue("prioritario") // a quale valore della colonna "tipo_ordine" corrisponde questa entità
 public class OrdinePrioritario extends Ordine {
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Double sovrapprezzo;
 }
