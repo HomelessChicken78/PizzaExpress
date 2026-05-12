@@ -113,7 +113,7 @@ public class OrdineServiceTest {
         // Chiamata del metodo da testare
         OrdineDTO creato = ordineService.creaOrdine(1L, ordineDaCreare);
 
-        // Verifica
+        // Verifiche
         assertNotNull(creato);
         assertEquals("123", creato.getCodice());
     }
