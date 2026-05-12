@@ -66,4 +66,76 @@ public class OrdineRepositoryTest {
         assertEquals("Margherita", ordinePizzaSalvato.getPizza().getNome(), "La pizza nell'ordine pizza non si chiama margherita");
     }
 
+
+    @Test
+    public void testCancellaOrdine() {
+        // Crea l'ordine e le entità correlate (Pizza e OrdinePizza)
+        Pizza margherita = new Pizza();
+        margherita.setNome("Margherita");
+        margherita.setDescrizione("Molto buona");
+        margherita.setPrezzo(9.0);
+        Pizza savedPizza = pizzaRepository.saveAndFlush(margherita);
+        assertNotNull(savedPizza, "SETUP FALLITO: non è stato possibile salvare la pizza nel sistema");
+        Long idPizza = savedPizza.getIdPizza(); // Prendi l'id della pizza per fare il findById dopo e controllare che non sia stata rimossa
+        assertNotNull(idPizza, "SETUP FALLITO: id della pizza salvata è null");
+
+
+        OrdinePizza op = new OrdinePizza();
+        op.setQuantita(2);
+        op.setPizza(savedPizza);
+        Collection<OrdinePizza> pizzeOrdinate = new ArrayList<>();
+        pizzeOrdinate.add(op);
+
+        Ordine ordine = new Ordine();
+        ordine.setCodice("A45");
+        ordine.setPizzeOrdinate(pizzeOrdinate);
+
+        Ordine savedOrdine = ordineRepository.save(ordine);
+        assertNotNull(savedOrdine, "SETUP FALLITO: L'ordine non è stato creato correttamente");
+
+        // Prova a cancellare l'ordine
+        ordineRepository.deleteById("A45");
+
+        // Verifiche
+        assertNull(ordineRepository.findById("A45").orElse(null), "L'ordine non è stato eliminato correttamente");
+        assertNotNull(pizzaRepository.findById(idPizza), "La pizza è stata rimossa assieme all'ordine. Solo l'ordine deve esser cancellato");
+    }
+
+    @Test
+    public void testCercaOrdine() {
+        // Crea l'ordine e le entità correlate (Pizza e OrdinePizza)
+        Pizza margherita = new Pizza();
+        margherita.setNome("Margherita");
+        margherita.setDescrizione("Molto buona");
+        margherita.setPrezzo(9.0);
+        Pizza savedPizza = pizzaRepository.saveAndFlush(margherita);
+        assertNotNull(savedPizza, "SETUP FALLITO: non è stato possibile salvare la pizza nel sistema");
+
+        OrdinePizza op = new OrdinePizza();
+        op.setQuantita(2);
+        op.setPizza(savedPizza);
+        Collection<OrdinePizza> pizzeOrdinate = new ArrayList<>();
+        pizzeOrdinate.add(op);
+
+        Ordine ordine = new Ordine();
+        ordine.setCodice("QI5");
+        ordine.setPizzeOrdinate(pizzeOrdinate);
+
+        ordineRepository.save(ordine);
+
+        // Verifiche
+        Ordine trovato = ordineRepository.findById("QI5").orElse(null);
+        assertNotNull(trovato, "La ricerca della pizza non è andata a buon fine");
+
+        OrdinePizza ordinePizza = trovato.getPizzeOrdinate()
+                .stream()
+                .findFirst()
+                .orElse(null);
+        assertNotNull(ordinePizza, "L'ordine non ritorna correttamente la lista delle pizze ordinate (OrdinePizza)");
+
+        Pizza pizzaOrdinata = ordinePizza.getPizza();
+        assertNotNull(pizzaOrdinata, "L'ordine ritorna una lista di OrdinePizza, ma gli OrdinePizza hanno Pizza a null");
+        assertNotNull(pizzaRepository.findById(pizzaOrdinata.getIdPizza()).orElse(null), "L'ordine contiene delle pizze inesistenti nel sistema");
+
+    }
 }
