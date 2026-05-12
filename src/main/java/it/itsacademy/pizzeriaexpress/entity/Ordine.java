@@ -17,7 +17,7 @@ public class Ordine {
     @Id
     private String codice;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}) // Quando l'id è una stringa oppure è un Long/Integer ma non ha autoincrement, jpa usa Merge non persist
     @JoinColumn(name = "fk_pizza_ord", nullable = false)
     private Collection<OrdinePizza> pizzeOrdinate;
 
