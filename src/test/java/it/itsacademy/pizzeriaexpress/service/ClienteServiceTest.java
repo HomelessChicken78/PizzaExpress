@@ -1,7 +1,8 @@
 package it.itsacademy.pizzeriaexpress.service;
 
-import it.itsacademy.pizzeriaexpress.dto.ClienteDTO;
+import it.itsacademy.pizzeriaexpress.dto.*;
 import it.itsacademy.pizzeriaexpress.entity.*;
+import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.ClienteRepository;
 import it.itsacademy.pizzeriaexpress.utility.mapper.ClienteMapper;
@@ -11,6 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -66,8 +70,13 @@ public class ClienteServiceTest {
         clienteCreato.setIndirizzo("Via Coccodrilli 62, Fiumicino");
         clienteCreato.setTelefono("3985682254");
 
+        // Aggiunta di un ordine
+        Collection<Ordine> ordiniEntity = new ArrayList<>();
+        ordiniEntity.add(new Ordine());
+        clienteCreato.setOrdini(ordiniEntity); // Collego l'ordine al cliente
+
         // Stub del metodo .save nella repository
-        when(clienteRepository.save(clienteCreato)).thenReturn(
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(
                 clienteCreato
         );
 
@@ -78,11 +87,56 @@ public class ClienteServiceTest {
         clienteDaCreare.setNome("Giacomo Coccodrillini");
         clienteDaCreare.setIndirizzo("Via Coccodrilli 62, Fiumicino");
         clienteDaCreare.setTelefono("3985682254");
+        clienteDaCreare.setOrdini(
+                List.of(
+                    new OrdineDTO(
+                            "A23", new ArrayList<>(), null
+                    )
+                )
+        ); // Metti un OrdineDTO "finto" (senza pizza ordinate) al Cliente
 
         // Verifica
         ClienteDTO risultato = clienteService.registraCliente(clienteDaCreare);
-        assertNotNull(risultato); // Evitare i null
+        assertNotNull(risultato, "La service ritorna null"); // Evitare i null
         assertEquals(2L, risultato.getIdCliente());
         assertEquals("Giacomo Coccodrillini", risultato.getNome());
+    }
+
+    @Test
+    public void testRegistraClienteSenzaUnOrdine() {
+        // Creazione della entity Cliente per il ritorno dello stubbing della repository .save
+        Cliente clienteCreato = new Cliente();
+        clienteCreato.setIdCliente(2L);
+        clienteCreato.setNome("Giacomo Coccodrillini");
+        clienteCreato.setIndirizzo("Via Coccodrilli 62, Fiumicino");
+        clienteCreato.setTelefono("3985682254");
+
+        // Aggiunta di un ordine
+        Collection<Ordine> ordiniEntity = new ArrayList<>();
+        ordiniEntity.add(new Ordine());
+        clienteCreato.setOrdini(ordiniEntity); // Collego l'ordine al cliente
+
+        /* Creazione del DTO Cliente da passare al metodo con gli stessi attributi della entity
+        eccetto l' ID per la simulazione della auto generazione */
+        ClienteDTO clienteDaCreare = new ClienteDTO();
+        clienteDaCreare.setIdCliente(2L);
+        clienteDaCreare.setNome("Giacomo Coccodrillini");
+        clienteDaCreare.setIndirizzo("Via Coccodrilli 62, Fiumicino");
+        clienteDaCreare.setTelefono("3985682254");
+        // Ometto di proposito di mettere un ordine
+
+        // Verifica
+        assertThrows(BadRequestException.class, () -> clienteService.registraCliente(clienteDaCreare),
+                "La service non controlla che il dto contenga la collection di ordini " +
+                        "o lo controlla ma non lancia l'exception corretta");
+
+        // Provo a inserire un arraylist vuoto
+        clienteDaCreare.setOrdini(new ArrayList<>());
+
+        // Verifica
+        assertThrows(BadRequestException.class, () -> clienteService.registraCliente(clienteDaCreare),
+                "La service non controlla che la collection di ordini non sia vuota " +
+                        "o la controlla ma non lancia l'exception corretta");
+
     }
 }
