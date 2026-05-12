@@ -118,7 +118,7 @@ public class OrdineServiceTest {
         OrdineDTO ordineDaCreare = new OrdineDTO("123", null, riderOrdineDaCreare);
 
         // Verifica
-        assertThrows(NotFoundException.class, () -> {ordineService.creaOrdine(1L, ordineDaCreare);});
+        assertThrows(NotFoundException.class, () -> ordineService.creaOrdine(1L, ordineDaCreare));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class OrdineServiceTest {
         // Non c'è bisogno di fare lo stubbing del repositoryOrdine.save perché lancia l'exception prima
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
 
-        assertThrows(BadRequestException.class, () -> {ordineService.creaOrdine(1L, ordineDaCreare);}
+        assertThrows(BadRequestException.class, () -> ordineService.creaOrdine(1L, ordineDaCreare)
         , "La service non esegue il controllo del fatto che un ordine non può non avere pizze oppure lancia l'eccezione sbagliata");
     }
 
@@ -226,7 +226,7 @@ public class OrdineServiceTest {
         when(clienteRepository.findById(124L)).thenReturn(Optional.of(clienteTrovato));
 
         // Verifica
-        assertThrows(NotFoundException.class, () -> {ordineService.cercaOrdine(124L, "CIAO");});
+        assertThrows(NotFoundException.class, () -> ordineService.cercaOrdine(124L, "CIAO"));
     }
 
     @Test
@@ -235,7 +235,7 @@ public class OrdineServiceTest {
         when(clienteRepository.findById(564L)).thenReturn(Optional.empty());
 
         // Verifica
-        assertThrows(NotFoundException.class, () -> {ordineService.cercaOrdine(564L, "123");});
+        assertThrows(NotFoundException.class, () -> ordineService.cercaOrdine(564L, "123"));
     }
 
     @Test
