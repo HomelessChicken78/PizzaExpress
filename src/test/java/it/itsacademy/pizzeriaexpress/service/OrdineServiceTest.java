@@ -121,11 +121,10 @@ public class OrdineServiceTest {
     @Test
     public void testCreaOrdineClienteNonEsiste() {
         // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
-        RiderDTO riderOrdineDaCreare = new RiderDTO(1L, "Simone Dragoncelli");
-        OrdineDTO ordineDaCreare = new OrdineDTO("123", null, riderOrdineDaCreare);
+        OrdineDTO ordineDTO = creaNuovoOrdineDTO("123", null);
 
-        // Verifica
-        assertThrows(NotFoundException.class, () -> ordineService.creaOrdine(1L, ordineDaCreare));
+        // Verifiche
+        assertThrows(NotFoundException.class, () -> ordineService.creaOrdine(1L, ordineDTO));
     }
 
     @Test
