@@ -58,7 +58,7 @@ public class ClienteServiceTest {
     @Test
     public void testCercaClienteInesistente() {
         // Verifica
-        assertThrows(NotFoundException.class, () -> {clienteService.cercaCliente(87L);});
+        assertThrows(NotFoundException.class, () -> clienteService.cercaCliente(87L));
     }
 
     @Test
