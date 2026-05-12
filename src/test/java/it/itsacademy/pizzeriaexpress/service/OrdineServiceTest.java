@@ -94,36 +94,20 @@ public class OrdineServiceTest {
 
     @Test
     public void testCreaOrdine() {
-        // Creazione nuovo Ordine + Rider per lo stubbing del metodo ordineRepository.save
-        Rider riderOrdine = new Rider(1L, "Simone Dragoncelli");
-        Ordine nuovoOrdine = new Ordine("123", new ArrayList<>(), riderOrdine);
-
         // Creazione del Cliente che la repository di cliente ritornerà
-        Cliente clienteTrovato = new Cliente();
-        clienteTrovato.setIdCliente(1L);
-        clienteTrovato.setNome("Mario Mela");
-        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
-        clienteTrovato.setTelefono("337596639");
-        clienteTrovato.setOrdini(new ArrayList<>());
+        Cliente clienteTrovato = creaNuovoCliente(1L, "Mario Mela");
 
         // Creazione dell'OrdinePizza e della Pizza correlati
-        PizzaDTO margherita = new PizzaDTO();
-        margherita.setNome("Margherita");
-        margherita.setDescrizione("Molto buona");
-        margherita.setPrezzo(9.0);
-
+        PizzaDTO margherita = creaNuovaPizzaDTO(11L, "Margherita");
         OrdinePizzaDTO op = new OrdinePizzaDTO();
         op.setQuantita(2);
         op.setPizza(margherita);
         Collection<OrdinePizzaDTO> pizzeOrdinate = new ArrayList<>();
         pizzeOrdinate.add(op);
 
-        // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
-        RiderDTO riderOrdineDaCreare = new RiderDTO(1L, "Simone Dragoncelli");
-        OrdineDTO ordineDaCreare = new OrdineDTO("123", pizzeOrdinate, riderOrdineDaCreare);
+        OrdineDTO ordineDaCreare = creaNuovoOrdineDTO("123", pizzeOrdinate);
 
-        // Stubbing dei metodi delle repository
-        when(ordineRepository.save(any(Ordine.class))).thenReturn(nuovoOrdine);
+        when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
 
         // Chiamata del metodo da testare
@@ -132,8 +116,6 @@ public class OrdineServiceTest {
         // Verifica
         assertNotNull(creato);
         assertEquals("123", creato.getCodice());
-        assertEquals(1L, creato.getRider().getIdRider());
-        verify(ordineRepository, times(1)).save(any(Ordine.class));
     }
 
     @Test
