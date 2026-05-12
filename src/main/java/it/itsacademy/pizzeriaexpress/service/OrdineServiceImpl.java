@@ -2,6 +2,7 @@ package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.*;
 import it.itsacademy.pizzeriaexpress.entity.*;
+import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.*;
 import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapper;
@@ -28,9 +29,16 @@ public class OrdineServiceImpl implements OrdineService {
 
     @Override
     public OrdineDTO creaOrdine(Long idCliente, OrdineDTO nuovoOrdine) {
+        // Controlla che il cliente ordinante esista
         Cliente clienteOrditore = repositoryCliente.findById(idCliente).orElseThrow(
                 () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
         ); // prendi l'entity in stato managed
+
+        // Controlla che l'ordine abbia almeno una pizza
+        if (nuovoOrdine.getPizzeOrdinate() == null || nuovoOrdine.getPizzeOrdinate().isEmpty()) {
+            throw new BadRequestException("L'ordine appena creato deve contenere almeno una pizza");
+        }
+
         Ordine saved = repositoryOrdine.save(mapper.toEntity(nuovoOrdine)); // salva l'ordine, senza il suo cliente
         clienteOrditore.getOrdini().add(saved); // collega il cliente al suo nuovo ordine
 
