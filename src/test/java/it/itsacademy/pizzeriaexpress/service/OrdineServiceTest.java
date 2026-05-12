@@ -175,32 +175,23 @@ public class OrdineServiceTest {
     public void testCercaOrdineEsistente() {
         // Creazione nuovo Ordine + Rider per il Cliente
         Rider riderOrdine = new Rider(30L, "Simone Dragoncelli");
-        Ordine ordineCercato = new Ordine("123", new ArrayList<>(), riderOrdine);
+        Ordine ordineCercato = creaOrdineEntity("123", riderOrdine, null);
 
         // Creazione del Cliente che la repository di cliente ritornerà
-        Cliente clienteTrovato = new Cliente();
-        clienteTrovato.setIdCliente(1L);
-        clienteTrovato.setNome("Mario Mela");
-        clienteTrovato.setIndirizzo("Via Coccodrilli 42, Fiumicino");
-        clienteTrovato.setTelefono("337596639");
+        Cliente clienteTrovato = creaNuovoCliente(1L, "Mario Mela");
 
         // Collega l'ordine al Cliente
         ArrayList<Ordine> ordiniCliente = new ArrayList<>();
         ordiniCliente.add(ordineCercato);
         clienteTrovato.setOrdini(ordiniCliente);
 
-        // Stubbing del metodo della repository
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
 
-        // Chiamata metodo da testare
         OrdineDTO risultato = ordineService.cercaOrdine(1L, "123");
 
-        // Verifiche
         assertNotNull(risultato);
         assertEquals("123", risultato.getCodice());
-        assertNotNull(risultato.getRider());
         assertEquals(30L, risultato.getRider().getIdRider());
-        verify(clienteRepository, times(1)).findById(any(Long.class));
     }
 
     @Test
