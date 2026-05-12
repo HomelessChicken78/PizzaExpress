@@ -37,7 +37,7 @@ public class OrdineRepositoryTest {
 
         OrdinePizza op = new OrdinePizza();
         op.setQuantita(2);
-        op.setPizza(margherita);
+        op.setPizza(savedPizza);
         Collection<OrdinePizza> pizzeOrdinate = new ArrayList<>();
         pizzeOrdinate.add(op);
 
