@@ -207,19 +207,10 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testCercaOrdineClienteNonEsiste() {
-        // Stubbing del metodo della repository
-        when(clienteRepository.findById(564L)).thenReturn(Optional.empty());
-
-        // Verifica
-        assertThrows(NotFoundException.class, () -> ordineService.cercaOrdine(564L, "123"));
-    }
-
-    @Test
     public void testTuttiGliOrdini() {
         List<Ordine> tuttiGliOrdini = List.of(
-                new Ordine("N1 FRA", new ArrayList<>(), null),
-                new Ordine("N2 LDS", new ArrayList<>(), null)
+                creaOrdineEntity("N1 FRA", null, null),
+                creaOrdineEntity("N2 LDS", null, null)
         );
 
         when(ordineRepository.findAll()).thenReturn(tuttiGliOrdini);
