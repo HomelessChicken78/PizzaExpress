@@ -2,6 +2,7 @@ package it.itsacademy.pizzeriaexpress.interceptors;
 
 import it.itsacademy.pizzeriaexpress.dto.ErrorDTO;
 import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
+import it.itsacademy.pizzeriaexpress.exception.ConflictException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,5 +19,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorDTO> error404Handler(NotFoundException err404) {
        return new ResponseEntity<>(new ErrorDTO(err404.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorDTO> error409Handler(ConflictException err409) {
+        return new ResponseEntity<>(new ErrorDTO(err409.getMessage()), HttpStatus.CONFLICT);
     }
 }
