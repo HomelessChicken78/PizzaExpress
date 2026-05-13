@@ -6,10 +6,14 @@ import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.ClienteRepository;
 import it.itsacademy.pizzeriaexpress.utility.mapper.ClienteMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+@Service
+@Transactional
 public class ClienteServiceImpl implements ClienteService {
     @Autowired
     ClienteRepository repositoryCliente;
