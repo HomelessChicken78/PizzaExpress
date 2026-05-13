@@ -17,4 +17,9 @@ public class ClienteController {
     public ClienteDTO registraCliente(@RequestBody ClienteDTO nuovoCliente) {
         return clienteService.registraCliente(nuovoCliente);
     }
+
+    @GetMapping(path = "/{idCliente}", produces = json)
+    public ClienteDTO cercaCliente(@PathVariable Long idCliente) {
+        return clienteService.cercaCliente(idCliente);
+    }
 }
