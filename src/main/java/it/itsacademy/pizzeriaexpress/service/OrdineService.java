@@ -8,8 +8,6 @@ import java.util.Collection;
 public interface OrdineService {
     public OrdineDTO creaOrdine(Long idCliente, RegistraOrdineDTO nuovoOrdine);
 
-    public OrdineDTO modificaOrdine(Long idCliente, String codiceOrdine, OrdineDTO ordineCambiato);
-
     public OrdineDTO cercaOrdine(Long idCliente, String codiceOrdine);
 
     public Collection<OrdineDTO> tuttiGliOrdini();

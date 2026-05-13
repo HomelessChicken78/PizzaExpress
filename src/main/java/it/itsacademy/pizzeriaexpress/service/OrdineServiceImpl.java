@@ -81,15 +81,6 @@ public class OrdineServiceImpl implements OrdineService {
     }
 
     @Override
-    public OrdineDTO modificaOrdine(Long idCliente, String codiceOrdine, OrdineDTO ordineCambiato) {
-        ordineCambiato.setCodice(codiceOrdine);
-        cercaOrdine(idCliente, codiceOrdine);
-        Ordine saved = repositoryOrdine.save(mapper.toEntity(ordineCambiato));
-
-        return mapper.toDTO(saved);
-    }
-
-    @Override
     public OrdineDTO cercaOrdine(Long idCliente, String codiceOrdine) {
         // cerca il cliente
         Cliente clienteOrditore = repositoryCliente.findById(idCliente).orElseThrow(
