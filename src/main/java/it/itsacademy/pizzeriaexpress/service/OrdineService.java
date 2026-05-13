@@ -1,11 +1,12 @@
 package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.OrdineDTO;
+import it.itsacademy.pizzeriaexpress.dto.RegistraOrdineDTO;
 
 import java.util.Collection;
 
 public interface OrdineService {
-    public OrdineDTO creaOrdine(Long idCliente, OrdineDTO nuovoOrdine);
+    public OrdineDTO creaOrdine(Long idCliente, RegistraOrdineDTO nuovoOrdine);
 
     public OrdineDTO modificaOrdine(Long idCliente, String codiceOrdine, OrdineDTO ordineCambiato);
 

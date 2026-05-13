@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
@@ -28,7 +29,7 @@ public class OrdineServiceImpl implements OrdineService {
     OrdineMapper mapper;
 
     @Override
-    public OrdineDTO creaOrdine(Long idCliente, OrdineDTO nuovoOrdine) {
+    public OrdineDTO creaOrdine(Long idCliente, RegistraOrdineDTO nuovoOrdine) {
         // Controlla che il cliente ordinante esista
         Cliente clienteOrditore = repositoryCliente.findById(idCliente).orElseThrow(
                 () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
@@ -39,7 +40,26 @@ public class OrdineServiceImpl implements OrdineService {
             throw new BadRequestException("L'ordine appena creato deve contenere almeno una pizza");
         }
 
-        Ordine saved = repositoryOrdine.save(mapper.toEntity(nuovoOrdine)); // salva l'ordine, senza il suo cliente
+        // Visto che RegistraOrdineDTO ha solo gli id delle pizze dobbiamo fare un findById sulle pizze.
+        // Tuttavia il mapper non puà fare il findById quindi metà della conversione deve esser fatta direttamente nel service
+        // (il mapper può comunque occuparsi della conversione senza pizze)
+        OrdineDTO daSalvare = mapper.toCompleteOrdine(nuovoOrdine);
+        daSalvare.setPizzeOrdinate(new ArrayList<>());
+
+        for (AggiungiPizzaAllOrdineDTO pizzaOrdinata : nuovoOrdine.getPizzeOrdinate()) {
+            // Recuperiamo la pizza reale dal database (come DTO)
+            PizzaDTO pizzaTrovata = pizzaService.cercaPizza(pizzaOrdinata.getIdPizza());
+
+            // Colleghiamo la pizza presa al suo OrdinePizza
+            OrdinePizzaDTO op = new OrdinePizzaDTO();
+            op.setPizza(pizzaTrovata);
+            op.setQuantita(pizzaOrdinata.getQuantita());
+
+            // Colleghiamo all'ordine
+            daSalvare.getPizzeOrdinate().add(op);
+        }
+
+        Ordine saved = repositoryOrdine.save(mapper.toEntity(daSalvare)); // salva l'ordine, senza il suo cliente
         clienteOrditore.getOrdini().add(saved); // collega il cliente al suo nuovo ordine
 
         return mapper.toDTO(saved);
