@@ -3,6 +3,7 @@ package it.itsacademy.pizzeriaexpress.service;
 import it.itsacademy.pizzeriaexpress.dto.*;
 import it.itsacademy.pizzeriaexpress.entity.*;
 import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
+import it.itsacademy.pizzeriaexpress.exception.ConflictException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.*;
 import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapper;
@@ -30,6 +31,10 @@ public class OrdineServiceImpl implements OrdineService {
 
     @Override
     public OrdineDTO creaOrdine(Long idCliente, RegistraOrdineDTO nuovoOrdine) {
+        // Controlla che il codice dell'ordine non sia duplicato
+        if (repositoryOrdine.existsById(nuovoOrdine.getCodice()))
+            throw new ConflictException("Esiste già un ordine con codice " + nuovoOrdine.getCodice());
+
         // Controlla che il cliente ordinante esista
         Cliente clienteOrditore = repositoryCliente.findById(idCliente).orElseThrow(
                 () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
