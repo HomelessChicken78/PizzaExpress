@@ -1,7 +1,6 @@
 package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.ClienteDTO;
-import it.itsacademy.pizzeriaexpress.dto.OrdineDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraClienteDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraOrdineDTO;
 import it.itsacademy.pizzeriaexpress.entity.Cliente;
