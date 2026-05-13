@@ -27,6 +27,8 @@ public class ClienteServiceImpl implements ClienteService {
         if(nuovoCliente.getOrdini() == null || nuovoCliente.getOrdini().isEmpty())
             throw new BadRequestException("Un cliente deve essere registrato con almeno già un ordine");
 
+        nuovoCliente.setIdCliente(null); // Ignora l'id passato dal dto
+
         Cliente saved = repositoryCliente.save(mapper.toEntity(nuovoCliente));
 
         return mapper.toDTO(saved);
