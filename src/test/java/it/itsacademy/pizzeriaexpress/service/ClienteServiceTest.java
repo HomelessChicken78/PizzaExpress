@@ -7,10 +7,13 @@ import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.ClienteRepository;
 import it.itsacademy.pizzeriaexpress.utility.mapper.ClienteMapper;
 import it.itsacademy.pizzeriaexpress.utility.mapper.ClienteMapperImpl;
+import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapper;
+import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapperImpl;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,13 +28,31 @@ public class ClienteServiceTest {
     @Mock
     private ClienteRepository clienteRepository;
 
+    @Mock
+    private OrdineService ordineService;
+
     @Spy /* Questo fa si che uso il mapper vero.
     Uso il mapper vero, perché la logica è semplice e la dipendenza con il mapper è troppo stressa
     per esser mock-ata: tutte le funzioni della service usano il mapper almeno nel return devi usare la new*/
     private ClienteMapper clienteMapper = new ClienteMapperImpl();
 
+    @Spy
+    private OrdineMapper ordineMapper = new OrdineMapperImpl();
+
     @InjectMocks
     private ClienteServiceImpl clienteService;
+
+    @BeforeEach
+    void setUp() {
+        // Colleghiamo manualmente i mapper
+        // Poiché i mapper di MapStruct hanno campi privati,
+        // usiamo ReflectionTestUtils di Spring
+        ReflectionTestUtils.setField(
+                clienteMapper,
+                "ordineMapper",
+                ordineMapper
+        );
+    }
 
     @Test
     public void testCercaClienteEsiste() {
@@ -63,22 +84,13 @@ public class ClienteServiceTest {
 
     @Test
     public void testRegistraCliente() {
-        // Creazione della entity Cliente per il ritorno dello stubbing della repository .save
-        Cliente clienteCreato = new Cliente();
-        clienteCreato.setIdCliente(2L);
-        clienteCreato.setNome("Giacomo Coccodrillini");
-        clienteCreato.setIndirizzo("Via Coccodrilli 62, Fiumicino");
-        clienteCreato.setTelefono("3985682254");
+        // Stub del metodo clienteService.saveAndFlush
+        when(clienteRepository.saveAndFlush(any(Cliente.class))).thenAnswer(i -> {
+            Cliente cliente = i.getArgument(0);
+            cliente.setIdCliente(2L); // Ritorna esattamente lo stesso cliente passato ma con id = 2L per simulare l'auto-increment
+            return cliente;
+        });
 
-        // Aggiunta di un ordine
-        Collection<Ordine> ordiniEntity = new ArrayList<>();
-        ordiniEntity.add(new Ordine());
-        clienteCreato.setOrdini(ordiniEntity); // Collego l'ordine al cliente
-
-        // Stub del metodo .save nella repository
-        when(clienteRepository.save(any(Cliente.class))).thenReturn(
-                clienteCreato
-        );
 
         /* Creazione del DTO Cliente da passare al metodo con gli stessi attributi della entity
         eccetto l' ID per la simulazione della auto generazione */
