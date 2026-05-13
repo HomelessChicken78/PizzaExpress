@@ -1,11 +1,12 @@
 package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.ClienteDTO;
+import it.itsacademy.pizzeriaexpress.dto.RegistraClienteDTO;
 
 import java.util.Collection;
 
 public interface ClienteService {
-    ClienteDTO registraCliente(ClienteDTO nuovoCliente);
+    ClienteDTO registraCliente(RegistraClienteDTO nuovoCliente);
 
     ClienteDTO cercaCliente(Long idCliente);
 
