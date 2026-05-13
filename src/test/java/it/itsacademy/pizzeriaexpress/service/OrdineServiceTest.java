@@ -93,16 +93,16 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testCreaOrdine() {/*
+    public void testCreaOrdine() {
         // Creazione del Cliente che la repository di cliente ritornerà
         Cliente clienteTrovato = creaNuovoCliente(1L, "Mario Mela");
 
         // Creazione dell'OrdinePizza e della Pizza correlati
         PizzaDTO margherita = creaNuovaPizzaDTO(11L, "Margherita");
-        OrdinePizzaDTO op = new OrdinePizzaDTO();
+        AggiungiPizzaAllOrdineDTO op = new AggiungiPizzaAllOrdineDTO();
         op.setQuantita(2);
-        op.setPizza(margherita);
-        Collection<OrdinePizzaDTO> pizzeOrdinate = new ArrayList<>();
+        op.setIdPizza(margherita.getIdPizza());
+        Collection<AggiungiPizzaAllOrdineDTO> pizzeOrdinate = new ArrayList<>();
         pizzeOrdinate.add(op);
 
         RegistraOrdineDTO ordineDaCreare = creaNuovoOrdineDTO("468", pizzeOrdinate);
@@ -115,7 +115,7 @@ public class OrdineServiceTest {
 
         // Verifiche
         assertNotNull(creato);
-        assertEquals("468", creato.getCodice());*/
+        assertEquals("468", creato.getCodice());
     }
 
     @Test
