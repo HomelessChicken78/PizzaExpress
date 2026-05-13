@@ -38,7 +38,7 @@ public class PizzaServiceImpl implements PizzaService {
     public PizzaDTO cercaPizza(Long idPizza) {
         Pizza trovata = repositoryPizza.findById(idPizza)
                 .orElseThrow(
-                        () -> new NotFoundException("Non è stato possibile trovare una pizza")
+                        () -> new NotFoundException("Non è stato possibile trovare una pizza con id " + idPizza)
                 );
         return mapper.toDTO(trovata);
     }
