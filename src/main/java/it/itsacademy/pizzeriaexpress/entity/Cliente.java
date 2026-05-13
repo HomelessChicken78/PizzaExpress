@@ -22,7 +22,7 @@ public class Cliente {
     private String telefono;
 
     @OneToMany(orphanRemoval = true, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "fk_ordini")
+    @JoinColumn(name = "fk_cliente")
     @Column(nullable = false)
     private Collection<Ordine> ordini;
 }
