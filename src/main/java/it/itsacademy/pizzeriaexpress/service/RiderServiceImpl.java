@@ -23,6 +23,8 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public RiderDTO registraRider(RiderDTO nuovoRider) {
+        nuovoRider.setIdRider(null); // Ignora l'id passato dal json
+
         Rider saved = repositoryRider.save(mapper.toEntity(nuovoRider));
 
         return mapper.toDTO(saved);
