@@ -4,6 +4,7 @@ import it.itsacademy.pizzeriaexpress.dto.ClienteDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraClienteDTO;
 import it.itsacademy.pizzeriaexpress.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -17,6 +18,7 @@ public class ClienteController {
     private ClienteService clienteService;
 
     @PostMapping(consumes = json, produces = json)
+    @ResponseStatus(HttpStatus.CREATED)
     public ClienteDTO registraCliente(@RequestBody RegistraClienteDTO nuovoCliente) {
         return clienteService.registraCliente(nuovoCliente);
     }
