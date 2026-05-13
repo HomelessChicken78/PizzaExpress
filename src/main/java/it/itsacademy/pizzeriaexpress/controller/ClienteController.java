@@ -6,6 +6,8 @@ import it.itsacademy.pizzeriaexpress.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping(path = "/clienti")
 public class ClienteController {
@@ -22,5 +24,10 @@ public class ClienteController {
     @GetMapping(path = "/{idCliente}", produces = json)
     public ClienteDTO cercaCliente(@PathVariable Long idCliente) {
         return clienteService.cercaCliente(idCliente);
+    }
+
+    @GetMapping(produces = json)
+    public Collection<ClienteDTO> tuttiIClienti() {
+        return clienteService.cercaTuttiIClienti();
     }
 }
