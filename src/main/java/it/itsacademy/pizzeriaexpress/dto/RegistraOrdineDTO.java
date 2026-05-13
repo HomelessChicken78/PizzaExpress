@@ -14,5 +14,5 @@ public class RegistraOrdineDTO {
 
     private Collection<AggiungiPizzaAllOrdineDTO> pizzeOrdinate;
 
-    private RiderDTO rider;
+    private Long rider;
 }

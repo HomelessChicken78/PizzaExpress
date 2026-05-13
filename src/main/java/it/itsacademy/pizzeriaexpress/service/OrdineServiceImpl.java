@@ -24,6 +24,9 @@ public class OrdineServiceImpl implements OrdineService {
     ClienteRepository repositoryCliente;
 
     @Autowired
+    RiderRepository repositoryRider;
+
+    @Autowired
     PizzaService pizzaService;
 
     @Autowired
@@ -66,6 +69,13 @@ public class OrdineServiceImpl implements OrdineService {
 
         Ordine saved = repositoryOrdine.save(mapper.toEntity(daSalvare)); // salva l'ordine, senza il suo cliente
         clienteOrditore.getOrdini().add(saved); // collega il cliente al suo nuovo ordine
+
+        // Cerca il rider
+        if (nuovoOrdine.getRider() != null) {
+            Rider riderTrovato = repositoryRider.findById(nuovoOrdine.getRider())
+                    .orElseThrow(() -> new NotFoundException("Non è stato possibile trovare un rider con id " + nuovoOrdine.getRider()));
+            saved.setRider(riderTrovato);
+        }
 
         return mapper.toDTO(saved);
     }
