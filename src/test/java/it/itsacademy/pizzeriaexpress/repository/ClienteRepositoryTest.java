@@ -88,7 +88,7 @@ public class ClienteRepositoryTest {
     }
     @Test
     public void testTuttiIClienti() {
-        //
+        int numInizialeClienti = clienteRepository.findAll().size(); // Tiene in considerazione dello stato della repo prima del test
         Cliente c1 = new Cliente();
 
         c1.setNome("Natasha Romanov");
@@ -108,6 +108,6 @@ public class ClienteRepositoryTest {
 
 
         Assert.assertNotNull(clienti);
-        assertEquals(2, clienti.size());
+        assertEquals(2+numInizialeClienti, clienti.size());
     }
 }
