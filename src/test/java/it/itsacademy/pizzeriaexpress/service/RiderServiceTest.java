@@ -69,7 +69,7 @@ public class RiderServiceTest {
     }
 
     @Test
-    public void testCreaPizza() {
+    public void testCreaRider() {
         RiderDTO nuovoRider = new RiderDTO(10L, "Margherita");
         Rider riderEntity = new Rider(7L, "Margherita");
 
