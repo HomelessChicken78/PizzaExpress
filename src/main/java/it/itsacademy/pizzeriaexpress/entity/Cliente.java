@@ -21,7 +21,7 @@ public class Cliente {
 
     private String telefono;
 
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "fk_ordini")
     @Column(nullable = false)
     private Collection<Ordine> ordini;
