@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.Collection;
 
-@Mapper(uses = OrdineMapper.class)
+@Mapper(componentModel = "spring", uses = OrdineMapper.class)
 public interface ClienteMapper {
     Cliente toEntity(ClienteDTO dto);
 
