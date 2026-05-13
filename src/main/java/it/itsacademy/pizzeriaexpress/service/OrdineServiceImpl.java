@@ -124,4 +124,17 @@ public class OrdineServiceImpl implements OrdineService {
         Ordine saved = repositoryOrdine.save(mapper.toEntity(ordine));
         return mapper.toDTO(saved);
     }
+
+    @Override
+    public OrdineDTO cambiaRider(Long idCliente, String codiceOrdine, Long idRider) {
+        Ordine ordine = mapper.toEntity(cercaOrdine(idCliente, codiceOrdine));
+
+        // Cerca il rider
+        Rider riderTrovato = repositoryRider.findById(idRider)
+                .orElseThrow(() -> new NotFoundException("Non è stato possibile trovare un rider con id " + idRider));
+        ordine.setRider(riderTrovato);
+
+        Ordine saved = repositoryOrdine.save(ordine);
+        return mapper.toDTO(saved);
+    }
 }
