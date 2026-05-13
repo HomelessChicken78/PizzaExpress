@@ -82,14 +82,14 @@ public class ClienteServiceTest {
 
         /* Creazione del DTO Cliente da passare al metodo con gli stessi attributi della entity
         eccetto l' ID per la simulazione della auto generazione */
-        ClienteDTO clienteDaCreare = new ClienteDTO();
+        RegistraClienteDTO clienteDaCreare = new RegistraClienteDTO();
         clienteDaCreare.setIdCliente(2L);
         clienteDaCreare.setNome("Giacomo Coccodrillini");
         clienteDaCreare.setIndirizzo("Via Coccodrilli 62, Fiumicino");
         clienteDaCreare.setTelefono("3985682254");
         clienteDaCreare.setOrdini(
                 List.of(
-                    new OrdineDTO(
+                    new RegistraOrdineDTO(
                             "A23", new ArrayList<>(), null
                     )
                 )
@@ -118,7 +118,7 @@ public class ClienteServiceTest {
 
         /* Creazione del DTO Cliente da passare al metodo con gli stessi attributi della entity
         eccetto l' ID per la simulazione della auto generazione */
-        ClienteDTO clienteDaCreare = new ClienteDTO();
+        RegistraClienteDTO clienteDaCreare = new RegistraClienteDTO();
         clienteDaCreare.setIdCliente(2L);
         clienteDaCreare.setNome("Giacomo Coccodrillini");
         clienteDaCreare.setIndirizzo("Via Coccodrilli 62, Fiumicino");
