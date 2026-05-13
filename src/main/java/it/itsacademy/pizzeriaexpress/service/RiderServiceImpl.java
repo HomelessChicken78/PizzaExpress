@@ -5,11 +5,15 @@ import it.itsacademy.pizzeriaexpress.entity.Rider;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.RiderRepository;
 import it.itsacademy.pizzeriaexpress.utility.mapper.RiderMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
 
+@Service
+@Transactional
 public class RiderServiceImpl implements RiderService {
     @Autowired
     RiderRepository repositoryRider;
