@@ -22,6 +22,7 @@ public class PizzaServiceImpl implements PizzaService {
 
     @Override
     public PizzaDTO creaPizza(PizzaDTO nuovaPizza) {
+        nuovaPizza.setIdPizza(null); // Questo permette di ignorare l'id passato dal json
         Pizza saved = repositoryPizza.save(mapper.toEntity(nuovaPizza));
         return mapper.toDTO(saved);
     }
