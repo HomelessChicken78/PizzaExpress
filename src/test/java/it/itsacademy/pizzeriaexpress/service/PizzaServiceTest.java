@@ -67,7 +67,7 @@ public class PizzaServiceTest {
         PizzaDTO margherita = new PizzaDTO(10L, "Margherita", "Pomodoro, Mozzarella", 7.50);
         Pizza margheritaEntity = new Pizza(1L, "Margherita", "Pomodoro, Mozzarella", 7.50);
 
-        when(pizzaRepository.save(pizzaMapper.toEntity(margherita))).thenReturn(margheritaEntity);
+        when(pizzaRepository.save(any(Pizza.class))).thenReturn(margheritaEntity);
 
         PizzaDTO pizzaCreata = pizzaService.creaPizza(margherita);
 
