@@ -73,7 +73,7 @@ public class RiderServiceTest {
         RiderDTO nuovoRider = new RiderDTO(10L, "Margherita");
         Rider riderEntity = new Rider(7L, "Margherita");
 
-        when(riderRepository.save(riderMapper.toEntity(nuovoRider))).thenReturn(riderEntity);
+        when(riderRepository.save(any(Rider.class))).thenReturn(riderEntity);
 
         RiderDTO pizzaCreata = riderService.registraRider(nuovoRider);
 
