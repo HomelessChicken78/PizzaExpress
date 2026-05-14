@@ -2,6 +2,7 @@ package it.itsacademy.pizzeriaexpress.controller;
 
 import it.itsacademy.pizzeriaexpress.dto.PizzaDTO;
 import it.itsacademy.pizzeriaexpress.service.PizzaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class PizzaController {
 
     @PostMapping(consumes = json, produces = json)
     @ResponseStatus(HttpStatus.CREATED)
-    public PizzaDTO creaPizza(@RequestBody PizzaDTO dtoNuovaPizza) {
+    public PizzaDTO creaPizza(@RequestBody @Valid PizzaDTO dtoNuovaPizza) {
         return pizzaService.creaPizza(dtoNuovaPizza);
     }
 
@@ -38,7 +39,7 @@ public class PizzaController {
     }
 
     @PutMapping(path = "/{idPizza}", produces = json, consumes = json)
-    public PizzaDTO modificaPizza(@PathVariable Long idPizza, @RequestBody PizzaDTO pizzaModificataDTO) {
+    public PizzaDTO modificaPizza(@PathVariable Long idPizza, @RequestBody @Valid PizzaDTO pizzaModificataDTO) {
         return pizzaService.modificaPizza(idPizza, pizzaModificataDTO);
     }
 }

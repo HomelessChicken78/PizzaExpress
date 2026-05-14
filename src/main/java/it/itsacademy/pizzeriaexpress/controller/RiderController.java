@@ -2,6 +2,7 @@ package it.itsacademy.pizzeriaexpress.controller;
 
 import it.itsacademy.pizzeriaexpress.dto.RiderDTO;
 import it.itsacademy.pizzeriaexpress.service.RiderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class RiderController {
 
     @PostMapping(consumes = json, produces = json)
     @ResponseStatus(HttpStatus.CREATED)
-    public RiderDTO registraRider(@RequestBody RiderDTO nuovoRiderDTO) {
+    public RiderDTO registraRider(@RequestBody @Valid RiderDTO nuovoRiderDTO) {
         return riderService.registraRider(nuovoRiderDTO);
     }
 

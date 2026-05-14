@@ -5,6 +5,7 @@ import it.itsacademy.pizzeriaexpress.dto.IdRiderDTO;
 import it.itsacademy.pizzeriaexpress.dto.OrdineDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraOrdineDTO;
 import it.itsacademy.pizzeriaexpress.service.OrdineService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class OrdineController {
 
     @PostMapping(path = "/clienti/{idCliente}/ordini", consumes = json, produces = json)
     @ResponseStatus(HttpStatus.CREATED)
-    public OrdineDTO creaOrdine(@PathVariable Long idCliente, @RequestBody RegistraOrdineDTO nuovoOrdine) {
+    public OrdineDTO creaOrdine(@PathVariable Long idCliente, @RequestBody @Valid RegistraOrdineDTO nuovoOrdine) {
         return ordineService.creaOrdine(idCliente, nuovoOrdine);
     }
 
@@ -32,7 +33,7 @@ public class OrdineController {
     @PostMapping(path = "/clienti/{idCliente}/ordini/{codiceOrdine}/pizze", produces = json, consumes = json)
     @ResponseStatus(HttpStatus.CREATED)
     public OrdineDTO aggiungiPizza(@PathVariable Long idCliente, @PathVariable String codiceOrdine,
-                                   @RequestBody AggiungiPizzaAllOrdineDTO pizzaAggiunta) {
+                                   @RequestBody @Valid AggiungiPizzaAllOrdineDTO pizzaAggiunta) {
         return ordineService.aggiungiPizza(idCliente, codiceOrdine, pizzaAggiunta.getIdPizza(), pizzaAggiunta.getQuantita());
     }
 
