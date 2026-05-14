@@ -5,20 +5,14 @@ import it.itsacademy.pizzeriaexpress.entity.*;
 import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.ClienteRepository;
-import it.itsacademy.pizzeriaexpress.utility.mapper.ClienteMapper;
-import it.itsacademy.pizzeriaexpress.utility.mapper.ClienteMapperImpl;
-import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapper;
-import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapperImpl;
+import it.itsacademy.pizzeriaexpress.utility.mapper.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -39,6 +33,12 @@ public class ClienteServiceTest {
     @Spy
     private OrdineMapper ordineMapper = new OrdineMapperImpl();
 
+    @Spy
+    private OrdinePizzaMapper ordinePizzaMapper = new OrdinePizzaMapperImpl();
+
+    @Spy
+    private PizzaMapper pizzaMapper = new PizzaMapperImpl();
+
     @InjectMocks
     private ClienteServiceImpl clienteService;
 
@@ -51,6 +51,16 @@ public class ClienteServiceTest {
                 clienteMapper,
                 "ordineMapper",
                 ordineMapper
+        );
+        ReflectionTestUtils.setField(
+                ordineMapper,
+                "ordinePizzaMapper",
+                ordinePizzaMapper
+        );
+        ReflectionTestUtils.setField(
+                ordinePizzaMapper,
+                "pizzaMapper",
+                pizzaMapper
         );
     }
 
@@ -150,5 +160,50 @@ public class ClienteServiceTest {
                 "La service non controlla che la collection di ordini non sia vuota " +
                         "o la controlla ma non lancia l'exception corretta");
 
+    }
+
+    @Test
+    public void testCercaTuttiGliOrdiniDiUnCliente() {
+        // Creazione dei Rider
+        Rider rider1 = new Rider(110L, "Franceso Mangio");
+        Rider rider2 = new Rider(111L, "Dario Montagna");
+
+        // Creazione delle Pizze
+        Pizza margherita = new Pizza(1L, "Margherita", "Pomodoro, mozzarella, basilico", 5.0);
+        Pizza diavola = new Pizza(2L, "Diavola", "Pomodoro, mozzarella, salame piccante", 6.5);
+        Pizza quattroFormaggi = new Pizza(3L, "Quattro Formaggi", "Mozzarella, gorgonzola, emmental, parmigiano", 7.0);
+
+        // Creazione degli OrdinePizza
+        OrdinePizza op1 = new OrdinePizza(1L, 2, margherita);
+        OrdinePizza op2 = new OrdinePizza(2L, 1, diavola);
+        OrdinePizza op3 = new OrdinePizza(3L, 3, quattroFormaggi);
+        OrdinePizza op4 = new OrdinePizza(20L, 1, margherita);
+        OrdinePizza op5 = new OrdinePizza(21L, 2, diavola);
+
+        // Creazione degli ordini
+        Ordine ordine1 = new Ordine("Cool001",
+                Arrays.asList(op1, op2, op3),
+                rider1);
+        Ordine ordine2 = new Ordine("Cool002",
+                Arrays.asList(op4, op5),
+                rider2);
+
+        // Lista di ordini
+        List<Ordine> listaOrdini = new ArrayList<>();
+        listaOrdini.add(ordine1);
+        listaOrdini.add(ordine2);
+
+        // Stubbing del metodo
+        when(clienteRepository.findById(1L)).thenReturn(
+                Optional.of(new Cliente(37L, "Leandro Impazienza", "Via Cesare Pavese 123, Roma", "351 4561 2098", listaOrdini))
+        );
+
+        Collection<OrdineDTO> risultato = clienteService.tuttiGliOrdiniDelCliente(1L);
+
+        // Verifiche
+        assertNotNull(risultato, "Non è stato ritornato alcun risultato dal test");
+        assertEquals(2, risultato.size(), "Numero di ordini del cliente diverso da quello atteso");
+        assertNotNull(risultato.stream().findFirst().orElse(null), "La lista contiene tornata contiene ordini null");
+        assertEquals("Cool001", risultato.stream().findFirst().orElse(null).getCodice(), "Il codice di uno degli ordini ritornato non è quello atteso");
     }
 }
