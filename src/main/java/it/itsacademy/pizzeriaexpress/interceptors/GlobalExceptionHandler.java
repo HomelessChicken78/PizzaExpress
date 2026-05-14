@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
                         .stream()
                         .collect(Collectors.toMap(
                                 FieldError::getField,
-                                err -> err.getDefaultMessage() != null ? err.getDefaultMessage() : "missing error message",
+                                err -> err.getDefaultMessage() != null ? err.getDefaultMessage() : "missing error message", // Evita i null nel caso in cui non ci sia un messaggio
                                 (existing, replacement) -> existing // Prendi sempre quello già esistente in caso field duplicati
                             ))
         );
