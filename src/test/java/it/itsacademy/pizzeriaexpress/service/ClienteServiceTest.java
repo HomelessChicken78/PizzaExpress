@@ -165,7 +165,7 @@ public class ClienteServiceTest {
     @Test
     public void testCercaTuttiGliOrdiniDiUnCliente() {
         // Creazione dei Rider
-        Rider rider1 = new Rider(110L, "Franceso Mangio");
+        Rider rider1 = new Rider(110L, "Francesco Mangio");
         Rider rider2 = new Rider(111L, "Dario Montagna");
 
         // Creazione delle Pizze
