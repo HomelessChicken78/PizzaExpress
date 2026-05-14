@@ -42,7 +42,7 @@ public class RiderServiceTest {
     @Test
     public void testCercaPizzaMaNonTrovata() {
         when(riderRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> {riderService.cercaRider(1L);});
+        assertThrows(NotFoundException.class, () -> riderService.cercaRider(1L));
     }
 
     @Test
