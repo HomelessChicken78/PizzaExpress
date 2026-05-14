@@ -1,7 +1,6 @@
 package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.PizzaDTO;
-import it.itsacademy.pizzeriaexpress.entity.Pizza;
 
 import java.util.Collection;
 
