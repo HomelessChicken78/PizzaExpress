@@ -7,18 +7,18 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorDTO {
+public class ErrorResponseDTO {
     private String message;
 
     private LocalDate timestamp = LocalDate.now();
 
     private Integer status = 400;
 
-    public ErrorDTO(String message) {
+    public ErrorResponseDTO(String message) {
         this.message = message;
     }
 
-    public ErrorDTO(String message, Integer status) {
+    public ErrorResponseDTO(String message, Integer status) {
         this.message = message;
         this.status = status;
     }
