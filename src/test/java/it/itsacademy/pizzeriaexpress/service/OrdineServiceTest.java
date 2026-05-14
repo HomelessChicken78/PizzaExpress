@@ -40,15 +40,15 @@ public class OrdineServiceTest {
     private RiderRepository riderRepository;
 
     @Spy
-    private OrdinePizzaMapperImpl ordinePizzaMapper = new OrdinePizzaMapperImpl();
+    private final OrdinePizzaMapperImpl ordinePizzaMapper = new OrdinePizzaMapperImpl();
 
     @Spy
-    private PizzaMapperImpl pizzaMapper = new PizzaMapperImpl();
+    private final PizzaMapperImpl pizzaMapper = new PizzaMapperImpl();
 
     @Spy /* Questo fa si che uso il mapper vero.
     Uso il mapper vero, perché la logica è semplice e la dipendenza con il mapper è troppo stressa
     per esser mock-ata: tutte le funzioni della service usano il mapper almeno nel return devi usare la new*/
-    private OrdineMapperImpl ordineMapper = new OrdineMapperImpl();
+    private final OrdineMapperImpl ordineMapper = new OrdineMapperImpl();
 
     @InjectMocks
     private OrdineServiceImpl ordineService;

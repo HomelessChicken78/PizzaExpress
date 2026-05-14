@@ -28,16 +28,16 @@ public class ClienteServiceTest {
     @Spy /* Questo fa si che uso il mapper vero.
     Uso il mapper vero, perché la logica è semplice e la dipendenza con il mapper è troppo stressa
     per esser mock-ata: tutte le funzioni della service usano il mapper almeno nel return devi usare la new*/
-    private ClienteMapper clienteMapper = new ClienteMapperImpl();
+    private final ClienteMapper clienteMapper = new ClienteMapperImpl();
 
     @Spy
-    private OrdineMapper ordineMapper = new OrdineMapperImpl();
+    private final OrdineMapper ordineMapper = new OrdineMapperImpl();
 
     @Spy
-    private OrdinePizzaMapper ordinePizzaMapper = new OrdinePizzaMapperImpl();
+    private final OrdinePizzaMapper ordinePizzaMapper = new OrdinePizzaMapperImpl();
 
     @Spy
-    private PizzaMapper pizzaMapper = new PizzaMapperImpl();
+    private final PizzaMapper pizzaMapper = new PizzaMapperImpl();
 
     @InjectMocks
     private ClienteServiceImpl clienteService;
