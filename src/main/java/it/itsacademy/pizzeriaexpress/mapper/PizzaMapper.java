@@ -8,9 +8,9 @@ import java.util.Collection;
 
 @Mapper(componentModel = "spring")
 public interface PizzaMapper {
-    public Pizza toEntity(PizzaDTO dto);
+    Pizza toEntity(PizzaDTO dto);
 
-    public PizzaDTO toDTO(Pizza entity);
+    PizzaDTO toDTO(Pizza entity);
 
-    public Collection<PizzaDTO> toDTO(Collection<Pizza> entities);
+    Collection<PizzaDTO> toDTO(Collection<Pizza> entities);
 }

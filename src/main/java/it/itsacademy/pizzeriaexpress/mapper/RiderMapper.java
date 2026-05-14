@@ -8,9 +8,9 @@ import java.util.Collection;
 
 @Mapper(componentModel = "spring")
 public interface RiderMapper {
-    public Rider toEntity(RiderDTO dto);
+    Rider toEntity(RiderDTO dto);
 
-    public RiderDTO toDTO(Rider entity);
+    RiderDTO toDTO(Rider entity);
 
-    public Collection<RiderDTO> toDTO(Collection<Rider> entities);
+    Collection<RiderDTO> toDTO(Collection<Rider> entities);
 }
