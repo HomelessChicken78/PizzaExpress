@@ -7,6 +7,7 @@ import it.itsacademy.pizzeriaexpress.exception.ConflictException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -43,7 +44,7 @@ public class GlobalExceptionHandler {
                 exceptionRaised.getFieldErrors()
                         .stream()
                         .collect(Collectors.toMap(
-                                err -> err.getField(),
+                                FieldError::getField,
                                 err -> err.getDefaultMessage(),
                                 (existing, replacement) -> existing // Prendi sempre quello già esistente in caso field duplicati
                             ))
