@@ -17,6 +17,6 @@ public class OrdinePizza {
     private Integer quantita;
 
     @ManyToOne
-    @JoinColumn(name = "fk_pizza")
+    @JoinColumn(name = "fk_pizza", nullable = false)
     private Pizza pizza;
 }
