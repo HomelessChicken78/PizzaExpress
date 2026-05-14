@@ -27,14 +27,14 @@ public class GlobalExceptionHandler {
        return ResponseEntity
                .status(HttpStatus.NOT_FOUND) // Usando .notFound non posso mettere un body con .body perché non ritorna
                                             // un BodyBuilder (usato per il body) ma un HeadersBuilder (usato per gli headers)
-               .body(new GeneralErrorResponseDTO(err404.getMessage()));
+               .body(new GeneralErrorResponseDTO(err404.getMessage(), 404));
     }
 
     @ExceptionHandler
     public ResponseEntity<GeneralErrorResponseDTO> error409Handler(ConflictException err409) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT) // Non esiste .conflict
-                .body(new GeneralErrorResponseDTO(err409.getMessage()));
+                .body(new GeneralErrorResponseDTO(err409.getMessage(), 409));
     }
 
     @ExceptionHandler
