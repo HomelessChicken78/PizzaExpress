@@ -3,6 +3,7 @@ package it.itsacademy.pizzeriaexpress.dto;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 public class GeneralErrorResponseDTO {
     private String message;
 
-    private LocalDate timestamp = LocalDate.now();
+    private LocalDateTime timestamp = LocalDateTime.now();
 
     private Integer status = 400;
 

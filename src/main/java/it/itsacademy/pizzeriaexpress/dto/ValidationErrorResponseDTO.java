@@ -3,6 +3,7 @@ package it.itsacademy.pizzeriaexpress.dto;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class ValidationErrorResponseDTO {
     private Map<String, String> errors;
 
-    private LocalDate timestamp = LocalDate.now();
+    private LocalDateTime timestamp = LocalDateTime.now();
 
     private Integer status = 400;
 
