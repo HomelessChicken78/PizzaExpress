@@ -2,7 +2,6 @@ package it.itsacademy.pizzeriaexpress.dto;
 
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
