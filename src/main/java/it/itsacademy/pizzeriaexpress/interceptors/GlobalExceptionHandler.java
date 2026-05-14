@@ -13,16 +13,23 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<GeneralErrorResponseDTO> error400Handler(BadRequestException err400) {
-        return new ResponseEntity<>(new GeneralErrorResponseDTO(err400.getMessage()), HttpStatus.BAD_REQUEST);
+        return ResponseEntity
+                .badRequest()
+                .body(new GeneralErrorResponseDTO(err400.getMessage()));
     }
 
     @ExceptionHandler
     public ResponseEntity<GeneralErrorResponseDTO> error404Handler(NotFoundException err404) {
-       return new ResponseEntity<>(new GeneralErrorResponseDTO(err404.getMessage()), HttpStatus.NOT_FOUND);
+       return ResponseEntity
+               .status(HttpStatus.NOT_FOUND) // Usando .notFound non posso mettere un body con .body perché non ritorna
+                                            // un BodyBuilder (usato per il body) ma un HeadersBuilder (usato per gli headers)
+               .body(new GeneralErrorResponseDTO(err404.getMessage()));
     }
 
     @ExceptionHandler
     public ResponseEntity<GeneralErrorResponseDTO> error409Handler(ConflictException err409) {
-        return new ResponseEntity<>(new GeneralErrorResponseDTO(err409.getMessage()), HttpStatus.CONFLICT);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT) // Non esiste .conflict
+                .body(new GeneralErrorResponseDTO(err409.getMessage()));
     }
 }
