@@ -43,7 +43,7 @@ public class PizzaServiceTest {
     @Test
     public void testCercaPizzaMaNonTrovata() {
         when(pizzaRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> {pizzaService.cercaPizza(1L);});
+        assertThrows(NotFoundException.class, () -> pizzaService.cercaPizza(1L));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class PizzaServiceTest {
     @Test
     public void testEliminaMaNonEsiste() {
         when(pizzaRepository.findById(123L)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> {pizzaService.eliminaPizza(123L);});
+        assertThrows(NotFoundException.class, () -> pizzaService.eliminaPizza(123L));
     }
 
     @Test void testModificaPizza() {
