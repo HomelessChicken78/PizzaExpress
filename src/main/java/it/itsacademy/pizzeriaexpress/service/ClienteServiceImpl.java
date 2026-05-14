@@ -1,6 +1,7 @@
 package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.ClienteDTO;
+import it.itsacademy.pizzeriaexpress.dto.OrdineDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraClienteDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraOrdineDTO;
 import it.itsacademy.pizzeriaexpress.entity.Cliente;
@@ -8,12 +9,14 @@ import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.ClienteRepository;
 import it.itsacademy.pizzeriaexpress.utility.mapper.ClienteMapper;
+import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @Transactional
@@ -26,6 +29,9 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
     ClienteMapper mapper;
+
+    @Autowired
+    OrdineMapper mapperOrdini;
 
     @Override
     public ClienteDTO registraCliente(RegistraClienteDTO nuovoCliente) {
@@ -65,5 +71,14 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Collection<ClienteDTO> cercaTuttiIClienti() {
         return mapper.toDTO(repositoryCliente.findAll());
+    }
+
+    @Override
+    public Collection<OrdineDTO> tuttiGliOrdiniDelCliente(Long idCliente) {
+        Cliente trovato = repositoryCliente.findById(idCliente).orElseThrow(
+                () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
+        );
+
+        return mapperOrdini.toDTO(trovato.getOrdini());
     }
 }

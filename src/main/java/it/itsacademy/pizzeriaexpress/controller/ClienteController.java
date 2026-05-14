@@ -1,7 +1,9 @@
 package it.itsacademy.pizzeriaexpress.controller;
 
 import it.itsacademy.pizzeriaexpress.dto.ClienteDTO;
+import it.itsacademy.pizzeriaexpress.dto.OrdineDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraClienteDTO;
+import it.itsacademy.pizzeriaexpress.entity.Ordine;
 import it.itsacademy.pizzeriaexpress.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,5 +33,10 @@ public class ClienteController {
     @GetMapping(produces = json)
     public Collection<ClienteDTO> tuttiIClienti() {
         return clienteService.cercaTuttiIClienti();
+    }
+
+    @GetMapping(path = "/{idCliente}/ordini", produces = json)
+    public Collection<OrdineDTO> tuttiGliOrdiniDelCliente(@PathVariable Long idCliente) {
+        return clienteService.tuttiGliOrdiniDelCliente(idCliente);
     }
 }
