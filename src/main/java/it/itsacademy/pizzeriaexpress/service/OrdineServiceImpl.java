@@ -6,7 +6,7 @@ import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
 import it.itsacademy.pizzeriaexpress.exception.ConflictException;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.*;
-import it.itsacademy.pizzeriaexpress.utility.mapper.OrdineMapper;
+import it.itsacademy.pizzeriaexpress.mapper.OrdineMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

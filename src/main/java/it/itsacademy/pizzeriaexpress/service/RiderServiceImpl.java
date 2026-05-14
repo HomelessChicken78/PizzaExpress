@@ -4,13 +4,12 @@ import it.itsacademy.pizzeriaexpress.dto.RiderDTO;
 import it.itsacademy.pizzeriaexpress.entity.Rider;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.RiderRepository;
-import it.itsacademy.pizzeriaexpress.utility.mapper.RiderMapper;
+import it.itsacademy.pizzeriaexpress.mapper.RiderMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
 
 @Service
 @Transactional

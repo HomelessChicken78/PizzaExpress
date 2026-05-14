@@ -1,4 +1,4 @@
-package it.itsacademy.pizzeriaexpress.utility.mapper;
+package it.itsacademy.pizzeriaexpress.mapper;
 
 import it.itsacademy.pizzeriaexpress.dto.RiderDTO;
 import it.itsacademy.pizzeriaexpress.entity.Rider;

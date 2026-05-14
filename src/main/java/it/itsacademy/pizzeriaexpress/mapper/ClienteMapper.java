@@ -1,4 +1,4 @@
-package it.itsacademy.pizzeriaexpress.utility.mapper;
+package it.itsacademy.pizzeriaexpress.mapper;
 
 import it.itsacademy.pizzeriaexpress.dto.ClienteDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraClienteDTO;

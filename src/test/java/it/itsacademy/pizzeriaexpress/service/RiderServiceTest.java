@@ -1,11 +1,10 @@
 package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.RiderDTO;
-import it.itsacademy.pizzeriaexpress.entity.Pizza;
 import it.itsacademy.pizzeriaexpress.entity.Rider;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.RiderRepository;
-import it.itsacademy.pizzeriaexpress.utility.mapper.RiderMapperImpl;
+import it.itsacademy.pizzeriaexpress.mapper.RiderMapperImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
