@@ -125,9 +125,12 @@ public class OrdineServiceTest {
     @Test
     public void testCreaOrdineClienteNonEsiste() {
         // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
-        RegistraOrdineDTO ordineDTO = creaNuovoOrdineDTO("123", null);
+        RegistraOrdineDTO ordineDTO = creaNuovoOrdineDTO("123", List.of(new AggiungiPizzaAllOrdineDTO(1L, 2)));
 
-        // Verifiche
+        // Stubbing del metodo .findByIdOrThrow
+        when(clienteRepository.findByIdOrThrow(any(Long.class))).thenThrow(NotFoundException.class);
+
+        // Verifica che rilanci l'eccezione
         assertThrows(NotFoundException.class, () -> ordineService.creaOrdine(1L, ordineDTO));
     }
 
@@ -141,7 +144,7 @@ public class OrdineServiceTest {
 
         // Stubbing dei metodi delle repository
         // Non c'è bisogno di fare lo stubbing del repositoryOrdine.save perché lancia l'exception prima
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
+        when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
 
         assertThrows(BadRequestException.class, () -> ordineService.creaOrdine(1L, ordineDaCreare),
                 "La service non esegue il controllo del fatto che un ordine non può non avere pizze oppure lancia l'eccezione sbagliata");
