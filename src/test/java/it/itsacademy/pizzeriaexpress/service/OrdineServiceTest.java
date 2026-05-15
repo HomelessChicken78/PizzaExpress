@@ -111,7 +111,7 @@ public class OrdineServiceTest {
         RegistraOrdineDTO ordineDaCreare = creaNuovoOrdineDTO("468", pizzeOrdinate);
 
         when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
+        when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
         when(riderRepository.findById(1L)).thenReturn(Optional.of(new Rider(1L, "Lorenzo Purebirra")));
 
         // Chiamata del metodo da testare
@@ -148,6 +148,21 @@ public class OrdineServiceTest {
 
         assertThrows(BadRequestException.class, () -> ordineService.creaOrdine(1L, ordineDaCreare),
                 "La service non esegue il controllo del fatto che un ordine non può non avere pizze oppure lancia l'eccezione sbagliata");
+    }
+
+    @Test
+    public void testCreaOrdineConPizzeInesistenti() {
+        // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
+        RegistraOrdineDTO ordineDTO = creaNuovoOrdineDTO("123", List.of(new AggiungiPizzaAllOrdineDTO(1L, 2)));
+
+        // Stubbing dei metodi
+        when(clienteRepository.findByIdOrThrow(any(Long.class))).thenReturn(
+                new Cliente(2L, "Francesco Bianchi", "Via Bergamotti 12", "+39 477 2467", null)
+        );
+        when(pizzaService.cercaPizza(any(Long.class))).thenThrow(NotFoundException.class); // Simula che la pizza non sia trovata
+
+        // Verifica che l'exception sia rilanciata
+        assertThrows(NotFoundException.class, () -> ordineService.creaOrdine(1L, ordineDTO));
     }
 
     /*@Test
