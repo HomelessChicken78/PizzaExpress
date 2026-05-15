@@ -143,7 +143,9 @@ public class OrdineServiceTest {
 
         // Stubbing dei metodi delle repository
         // Non c'è bisogno di fare lo stubbing del repositoryOrdine.save perché lancia l'exception prima
-        when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
+        // Per clienteRepository.findByIdOrThrow usiamo lenient. Nel caso l'esistenza del cliente venga verificata prima
+        // della delle pizze, verrà usato. Se invece l'ordine è inverso non darà unnecessary stubbing
+        lenient().when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
 
         assertThrows(BadRequestException.class, () -> ordineService.creaOrdine(1L, ordineDaCreare),
                 "La service non esegue il controllo del fatto che un ordine non può non avere pizze oppure lancia l'eccezione sbagliata");
