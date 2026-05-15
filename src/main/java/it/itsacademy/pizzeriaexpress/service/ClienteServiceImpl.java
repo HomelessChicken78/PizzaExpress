@@ -60,9 +60,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public ClienteDTO cercaCliente(Long idCliente) {
-        Cliente trovato = repositoryCliente.findById(idCliente).orElseThrow(
-                () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
-        );
+        Cliente trovato = repositoryCliente.findByIdOrThrow(idCliente);
 
         return mapper.toDTO(trovato);
     }
@@ -74,9 +72,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     public Collection<OrdineDTO> tuttiGliOrdiniDelCliente(Long idCliente) {
-        Cliente trovato = repositoryCliente.findById(idCliente).orElseThrow(
-                () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
-        );
+        Cliente trovato = repositoryCliente.findByIdOrThrow(idCliente);
 
         return mapperOrdini.toDTO(trovato.getOrdini());
     }

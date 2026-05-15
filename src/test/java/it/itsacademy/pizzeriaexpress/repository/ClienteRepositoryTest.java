@@ -1,6 +1,8 @@
 package it.itsacademy.pizzeriaexpress.repository;
 
 import it.itsacademy.pizzeriaexpress.entity.Cliente;
+import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
+import org.aspectj.weaver.ast.Not;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +70,30 @@ public class ClienteRepositoryTest {
 
         assertTrue(found.isPresent());
         assertEquals(saved.getIdCliente(), found.get().getIdCliente());
+    }
+
+    @Test
+    public void testFindByIdOrThrow_trovato() {
+        Cliente c = new Cliente();
+
+        c.setNome("Persona Random");
+        c.setIndirizzo("via In Movimento 12");
+        c.setTelefono("78321646587");
+
+        Cliente saved = clienteRepository.save(c);
+
+        Cliente found = clienteRepository.findByIdOrThrow(c.getIdCliente());
+
+        assertNotNull(found, "Il metodo ClienteRepository.findByIdOrThrow(Long) ritorna null");
+        assertDoesNotThrow(() -> clienteRepository.findByIdOrThrow(c.getIdCliente()),
+                "Il metodo ClienteRepository.findByIdOrThrow(Long) lancia l'eccezione quando il cliente esiste");
+        assertEquals(saved.getIdCliente(), found.getIdCliente());
+    }
+
+    @Test
+    public void testFindByIdOrThrow_nonTrovato() {
+        assertThrows(NotFoundException.class, () -> clienteRepository.findByIdOrThrow(474L),
+                "Il metodo ClienteRepository.findByIdOrThrow(Long) non lancia l'eccezione quando il cliente non esiste");
     }
 
     @Test

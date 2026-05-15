@@ -74,9 +74,9 @@ public class ClienteServiceTest {
         clienteCreato.setTelefono("337596639");
 
         // Stubbing del metodo clienteRepository.findById
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(
+        when(clienteRepository.findByIdOrThrow(1L)).thenReturn(
                 clienteCreato
-        ));
+        );
 
         ClienteDTO trovato = clienteService.cercaCliente(1L);
 
@@ -88,8 +88,11 @@ public class ClienteServiceTest {
 
     @Test
     public void testCercaClienteInesistente() {
+        when(clienteRepository.findByIdOrThrow(any(Long.class))).thenThrow(NotFoundException.class);
+
         // Verifica
-        assertThrows(NotFoundException.class, () -> clienteService.cercaCliente(87L));
+        verify(clienteRepository).findByIdOrThrow(any(Long.class));
+        assertThrows(NotFoundException.class, () -> clienteService.cercaCliente(87L)); // Eccezione propagata
     }
 
     @Test
@@ -194,8 +197,8 @@ public class ClienteServiceTest {
         listaOrdini.add(ordine2);
 
         // Stubbing del metodo
-        when(clienteRepository.findById(1L)).thenReturn(
-                Optional.of(new Cliente(37L, "Leandro Impazienza", "Via Cesare Pavese 123, Roma", "351 4561 2098", listaOrdini))
+        when(clienteRepository.findByIdOrThrow(1L)).thenReturn(
+                new Cliente(37L, "Leandro Impazienza", "Via Cesare Pavese 123, Roma", "351 4561 2098", listaOrdini)
         );
 
         Collection<OrdineDTO> risultato = clienteService.tuttiGliOrdiniDelCliente(1L);
