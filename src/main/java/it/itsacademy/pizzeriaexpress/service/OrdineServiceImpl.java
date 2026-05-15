@@ -70,8 +70,7 @@ public class OrdineServiceImpl implements OrdineService {
 
         // Cerca il rider
         if (nuovoOrdine.getRider() != null) {
-            Rider riderTrovato = repositoryRider.findById(nuovoOrdine.getRider())
-                    .orElseThrow(() -> new NotFoundException("Non è stato possibile trovare un rider con id " + nuovoOrdine.getRider()));
+            Rider riderTrovato = repositoryRider.findByIdOrThrow(nuovoOrdine.getRider());
             saved.setRider(riderTrovato);
         }
 
@@ -81,9 +80,7 @@ public class OrdineServiceImpl implements OrdineService {
     @Override
     public OrdineDTO cercaOrdine(Long idCliente, String codiceOrdine) {
         // cerca il cliente
-        Cliente clienteOrditore = repositoryCliente.findById(idCliente).orElseThrow(
-                () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
-        );
+        Cliente clienteOrditore = repositoryCliente.findByIdOrThrow(idCliente);
 
         // se viene trovato cerca se tra i suoi ordini ha un ordine con codice = codiceOrdine
         Ordine trovato = clienteOrditore.getOrdini().stream()
@@ -119,8 +116,7 @@ public class OrdineServiceImpl implements OrdineService {
         Ordine ordine = mapper.toEntity(cercaOrdine(idCliente, codiceOrdine));
 
         // Cerca il rider
-        Rider riderTrovato = repositoryRider.findById(idRider)
-                .orElseThrow(() -> new NotFoundException("Non è stato possibile trovare un rider con id " + idRider));
+        Rider riderTrovato = repositoryRider.findByIdOrThrow(idRider);
         ordine.setRider(riderTrovato);
 
         Ordine saved = repositoryOrdine.save(ordine);

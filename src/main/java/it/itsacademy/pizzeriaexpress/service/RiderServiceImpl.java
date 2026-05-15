@@ -40,9 +40,7 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public RiderDTO cercaRider(Long idRider) {
-        Rider trovato = repositoryRider.findById(idRider).orElseThrow(
-                () -> new NotFoundException("Non è stato possibile trovare un Rider con id " + idRider)
-        );
+        Rider trovato = repositoryRider.findByIdOrThrow(idRider);
 
         return mapper.toDTO(trovato);
     }
