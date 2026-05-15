@@ -90,6 +90,14 @@ public class OrdineServiceTest {
         return new RegistraOrdineDTO(codice, pizzeOrdinate, 1L);
     }
 
+    private RegistraOrdinePrioritarioDTO creaNuovoOrdinePrioritarioDTO(Double sovrapprezzo, String codice, Collection<AggiungiPizzaAllOrdineDTO> pizzeOrdinate) {
+        return new RegistraOrdinePrioritarioDTO(sovrapprezzo)
+                .builder()
+                .codice(codice)
+                .pizzeOrdinate(pizzeOrdinate)
+                .build();
+    }
+
     private Ordine creaOrdineEntity(String codice, Rider rider, Collection<OrdinePizza> pizzeOrdinate) {
         return new Ordine(codice, pizzeOrdinate, rider);
     }
@@ -119,6 +127,34 @@ public class OrdineServiceTest {
         // Verifiche
         assertNotNull(creato);
         assertEquals("468", creato.getCodice());
+    }
+
+    @Test
+    public void creaOrdinePrioritario_whenValid_thenOrdineReturned() {
+        // Creazione del Cliente che la repository di cliente ritornerà
+        Cliente clienteTrovato = creaNuovoCliente(1L, "Alberto Albero");
+
+        // Creazione dell'OrdinePizza e della Pizza correlati
+        PizzaDTO margherita = creaNuovaPizzaDTO(11L, "Diavola");
+        AggiungiPizzaAllOrdineDTO op = new AggiungiPizzaAllOrdineDTO();
+        op.setQuantita(3);
+        op.setIdPizza(margherita.getIdPizza());
+        Collection<AggiungiPizzaAllOrdineDTO> pizzeOrdinate = new ArrayList<>();
+        pizzeOrdinate.add(op);
+
+        RegistraOrdinePrioritarioDTO ordineDaCreare = creaNuovoOrdinePrioritarioDTO(2.0,"468", pizzeOrdinate);
+
+        when(ordineRepository.save(any(OrdinePrioritario.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
+        when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
+        //when(riderRepository.findByIdOrThrow(1L)).thenReturn(new Rider(1L, "Lorenzo Purebirra"));
+
+        // Chiamata del metodo da testare
+        OrdinePrioritarioDTO creato = ordineService.creaOrdinePrioritario(1L, ordineDaCreare);
+
+        // Verifiche
+        assertNotNull(creato);
+        assertEquals("468", creato.getCodice());
+        assertEquals(2.0, creato.getSovrapprezzo());
     }
 
     @Test
