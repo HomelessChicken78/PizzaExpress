@@ -30,19 +30,25 @@ public class RiderServiceTest {
     RiderServiceImpl riderService;
 
     @Test
-    public void testCercaPizza() {
+    public void testCercaRider() {
         Rider nuovoEntityRider = new Rider(
                 1L, "Assert Falsest"
         );
 
-        when(riderRepository.findById(1L)).thenReturn(Optional.of(nuovoEntityRider));
+        when(riderRepository.findByIdOrThrow(1L)).thenReturn(nuovoEntityRider);
+
         assertEquals("Assert Falsest", riderService.cercaRider(1L).getNome());
+        verify(riderRepository).findByIdOrThrow(1L);
     }
 
     @Test
-    public void testCercaPizzaMaNonTrovata() {
-        when(riderRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> riderService.cercaRider(1L));
+    public void testCercaRiderMaNonTrovato() {
+        when(riderRepository.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
+
+        // Verifiche
+        assertThrows(NotFoundException.class, () -> riderService.cercaRider(1L),
+                "L'exception non è propagata"); // Rilancia l'exception
+        verify(riderRepository).findByIdOrThrow(1L);
     }
 
     @Test
@@ -63,8 +69,11 @@ public class RiderServiceTest {
 
     @Test
     public void testEliminaPizzaRitornaPizza() {
-        when(riderRepository.findById(1L)).thenReturn(Optional.of(new Rider(1L, "Pierre Alberghieri")));
+        when(riderRepository.findByIdOrThrow(1L)).thenReturn(new Rider(1L, "Pierre Alberghieri"));
+
+        // Verifiche
         assertEquals(1L, riderService.licenziaRider(1L).getIdRider());
+        verify(riderRepository).findByIdOrThrow(1L);
     }
 
     @Test
