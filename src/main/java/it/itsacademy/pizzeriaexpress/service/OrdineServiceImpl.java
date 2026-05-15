@@ -39,9 +39,7 @@ public class OrdineServiceImpl implements OrdineService {
             throw new ConflictException("Esiste già un ordine con codice " + nuovoOrdine.getCodice());
 
         // Controlla che il cliente ordinante esista
-        Cliente clienteOrditore = repositoryCliente.findById(idCliente).orElseThrow(
-                () -> new NotFoundException("Non è stato possibile trovare un cliente con id " + idCliente)
-        ); // prendi l'entity in stato managed
+        Cliente clienteOrditore = repositoryCliente.findByIdOrThrow(idCliente); // prendi l'entity in stato managed
 
         // Controlla che l'ordine abbia almeno una pizza
         if (nuovoOrdine.getPizzeOrdinate() == null || nuovoOrdine.getPizzeOrdinate().isEmpty()) {
