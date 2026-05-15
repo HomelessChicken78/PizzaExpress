@@ -112,7 +112,7 @@ public class OrdineServiceTest {
 
         when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
         when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
-        when(riderRepository.findById(1L)).thenReturn(Optional.of(new Rider(1L, "Lorenzo Purebirra")));
+        when(riderRepository.findByIdOrThrow(1L)).thenReturn(new Rider(1L, "Lorenzo Purebirra"));
 
         // Chiamata del metodo da testare
         OrdineDTO creato = ordineService.creaOrdine(1L, ordineDaCreare);
@@ -207,7 +207,7 @@ public class OrdineServiceTest {
         ordiniCliente.add(ordineCercato);
         clienteTrovato.setOrdini(ordiniCliente);
 
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
+        when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
 
         OrdineDTO risultato = ordineService.cercaOrdine(1L, "123");
 
@@ -222,7 +222,7 @@ public class OrdineServiceTest {
         Cliente clienteTrovato = creaNuovoCliente(124L, "Leandro Impazienza");
 
         // Stubbing del metodo della repository
-        when(clienteRepository.findById(124L)).thenReturn(Optional.of(clienteTrovato));
+        when(clienteRepository.findByIdOrThrow(124L)).thenReturn(clienteTrovato);
 
         // Verifiche
         assertThrows(NotFoundException.class, () -> ordineService.cercaOrdine(124L, "CIAO"));
@@ -262,7 +262,7 @@ public class OrdineServiceTest {
 
         // Stubbing
         when(pizzaService.cercaPizza(11L)).thenReturn(pizzaCreataDTO);
-        when(clienteRepository.findById(1L)).thenReturn(Optional.of(clienteTrovato));
+        when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
         when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArguments()[0]);
 
         OrdineDTO risultato = ordineService.aggiungiPizza(1L, "LOL", 11L, 2);
