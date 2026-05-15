@@ -23,7 +23,7 @@ public class ClienteRepositoryTest {
     private ClienteRepository clienteRepository;
 
     @Test
-    public void testRegistraCliente() {
+    public void save_whenValidEntity_thenEntityIsPersisted() {
 
         Cliente c = new Cliente();
 
@@ -38,7 +38,7 @@ public class ClienteRepositoryTest {
 
     }
     @Test
-    public void testModificaCliente() {
+    public void save_afterSavingEntity_thenEntityIsModified() {
 
         Cliente c = new Cliente();
 
@@ -55,7 +55,7 @@ public class ClienteRepositoryTest {
     }
 
     @Test
-    public void testCercaCliente() {
+    public void findById_whenExists_thenIsReturned() {
 
         Cliente c = new Cliente();
 
@@ -72,7 +72,7 @@ public class ClienteRepositoryTest {
     }
 
     @Test
-    public void testFindByIdOrThrow_trovato() {
+    public void findByIdOrThrow_whenExists_thenIsReturned() {
         Cliente c = new Cliente();
 
         c.setNome("Persona Random");
@@ -90,13 +90,13 @@ public class ClienteRepositoryTest {
     }
 
     @Test
-    public void testFindByIdOrThrow_nonTrovato() {
+    public void findByIdOrThrow_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         assertThrows(NotFoundException.class, () -> clienteRepository.findByIdOrThrow(474L),
                 "Il metodo ClienteRepository.findByIdOrThrow(Long) non lancia l'eccezione quando il cliente non esiste");
     }
 
     @Test
-    public void testEliminaCliente() {
+    public void deleteById_whenExists_thenIsDeleted() {
 
         Cliente c = new Cliente();
 
@@ -111,8 +111,9 @@ public class ClienteRepositoryTest {
 
         assertFalse(deleted.isPresent());
     }
+
     @Test
-    public void testTuttiIClienti() {
+    public void findAll_returnsAllEntities() {
         int numInizialeClienti = clienteRepository.findAll().size(); // Tiene in considerazione dello stato della repo prima del test
         Cliente c1 = new Cliente();
 
