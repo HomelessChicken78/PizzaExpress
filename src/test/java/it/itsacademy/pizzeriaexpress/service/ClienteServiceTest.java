@@ -65,7 +65,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testCercaClienteEsiste() {
+    public void cercaCliente_whenExists_thenClienteClienteReturned() {
         // Creazione della entity che il metodo clienteRepository.findById ritornerà
         Cliente clienteCreato = new Cliente();
         clienteCreato.setIdCliente(1L);
@@ -87,7 +87,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testCercaClienteInesistente() {
+    public void cercaCliente_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         when(clienteRepository.findByIdOrThrow(any(Long.class))).thenThrow(NotFoundException.class);
 
         // Verifica
@@ -96,7 +96,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testRegistraCliente() {
+    public void registraCliente_whenValid_thenIsPersisted() {
         // Stub del metodo clienteService.saveAndFlush
         when(clienteRepository.saveAndFlush(any(Cliente.class))).thenAnswer(i -> {
             Cliente cliente = i.getArgument(0);
@@ -128,7 +128,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testRegistraClienteSenzaUnOrdine() {
+    public void registraCliente_whenMissingOrderInDTO_thenExceptionIsThrown() {
         // Creazione della entity Cliente per il ritorno dello stubbing della repository .save
         Cliente clienteCreato = new Cliente();
         clienteCreato.setIdCliente(2L);
@@ -166,7 +166,7 @@ public class ClienteServiceTest {
     }
 
     @Test
-    public void testCercaTuttiGliOrdiniDiUnCliente() {
+    public void tuttiGliOrdiniDelCliente_clienteExists_thenAllOrdersAreReturned() {
         // Creazione dei Rider
         Rider rider1 = new Rider(110L, "Francesco Mangio");
         Rider rider2 = new Rider(111L, "Dario Montagna");

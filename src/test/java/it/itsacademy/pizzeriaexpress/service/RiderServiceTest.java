@@ -29,7 +29,7 @@ public class RiderServiceTest {
     RiderServiceImpl riderService;
 
     @Test
-    public void testCercaRider() {
+    public void cercaRider_whenExists_thenRiderReturned() {
         Rider nuovoEntityRider = new Rider(
                 1L, "Assert Falsest"
         );
@@ -41,7 +41,7 @@ public class RiderServiceTest {
     }
 
     @Test
-    public void testCercaRiderMaNonTrovato() {
+    public void cercaRider_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         when(riderRepository.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
 
         // Verifiche
@@ -51,7 +51,7 @@ public class RiderServiceTest {
     }
 
     @Test
-    public void testCercaTutteLePizzeNelSistema() {
+    public void tuttiIRider_thenAllRidersReturned() {
         List<Rider> listaRiderNellaRepository = List.of(
                 new Rider(4L, "Assert Falser"),
                 new Rider(5L, "Ferdinando Quadrati"),
@@ -67,7 +67,7 @@ public class RiderServiceTest {
     }
 
     @Test
-    public void testEliminaPizzaRitornaPizza() {
+    public void licenziaRider_whenExists_thenRiderReturned() {
         when(riderRepository.findByIdOrThrow(1L)).thenReturn(new Rider(1L, "Pierre Alberghieri"));
 
         // Verifiche
@@ -76,15 +76,15 @@ public class RiderServiceTest {
     }
 
     @Test
-    public void testCreaRider() {
+    public void registraRider_whenValid_thenRiderReturned() {
         RiderDTO nuovoRider = new RiderDTO(10L, "Margherita");
         Rider riderEntity = new Rider(7L, "Margherita");
 
         when(riderRepository.save(any(Rider.class))).thenReturn(riderEntity);
 
-        RiderDTO pizzaCreata = riderService.registraRider(nuovoRider);
+        RiderDTO riderCreato = riderService.registraRider(nuovoRider);
 
-        assertEquals(7L, pizzaCreata.getIdRider());
-        assertEquals("Margherita", pizzaCreata.getNome());
+        assertEquals(7L, riderCreato.getIdRider());
+        assertEquals("Margherita", riderCreato.getNome());
     }
 }

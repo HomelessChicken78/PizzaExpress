@@ -30,7 +30,7 @@ public class PizzaServiceTest {
     PizzaServiceImpl pizzaService;
 
     @Test
-    public void testCercaPizza() {
+    public void cercaPizza_whenExists_thenPizzaReturned() {
         Pizza nuovaEntityPizza = new Pizza(
                 1L, "Margherita", "Pomodoro, Mozzarella, Basilico", 9.00
         );
@@ -43,7 +43,7 @@ public class PizzaServiceTest {
     }
 
     @Test
-    public void testCercaPizzaMaNonTrovata() {
+    public void cercaPizza_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         when(pizzaRepository.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
 
         // Verifiche
@@ -53,7 +53,7 @@ public class PizzaServiceTest {
     }
 
     @Test
-    public void testCercaTutteLePizzeNelSistema() {
+    public void tutteLePizze_thenAllPizzasReturned() {
         List<Pizza> listaPizzeNellaRepository = List.of(
                 new Pizza(1L, "Margherita", "Pomodoro, Mozzarella", 7.50),
                 new Pizza(2L, "Diavola", "Pomodoro, Mozzarella, Salame piccante", 8.50),
@@ -69,7 +69,7 @@ public class PizzaServiceTest {
     }
 
     @Test
-    public void testCreaPizza() {
+    public void creaPizza_whenValid_thenPizzaReturned() {
         PizzaDTO margherita = new PizzaDTO(10L, "Margherita", "Pomodoro, Mozzarella", 7.50);
         Pizza margheritaEntity = new Pizza(1L, "Margherita", "Pomodoro, Mozzarella", 7.50);
 
@@ -82,14 +82,14 @@ public class PizzaServiceTest {
     }
 
     @Test
-    public void testEliminaPizzaRitornaPizza() {
+    public void eliminaPizza_whenExists_thenPizzaReturned() {
         when(pizzaRepository.findByIdOrThrow(1L)).thenReturn(
                 new Pizza(1L, "Margherita", "Pomodoro, Mozzarella", 7.50));
         assertEquals(1L, pizzaService.eliminaPizza(1L).getIdPizza());
     }
 
     @Test
-    public void testEliminaMaNonEsiste() {
+    public void eliminaPizza_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         when(pizzaRepository.findByIdOrThrow(123L)).thenThrow(NotFoundException.class);
 
         // Verifica che l'exception venga propagata
@@ -98,7 +98,7 @@ public class PizzaServiceTest {
         verify((pizzaRepository)).findByIdOrThrow(any(Long.class));
     }
 
-    @Test void testModificaPizza() {
+    @Test void modificaPizza_whenValid_thenPizzaModified() {
         Long idOriginale = 1L;
         Pizza pizzaOriginale = new Pizza(idOriginale, "Funghi Porcini", "Non lo so", 70.20);
         PizzaDTO pizzaModificata = new PizzaDTO(93L, "Margherita", "Pomodoro, Mozzarella", 7.50);

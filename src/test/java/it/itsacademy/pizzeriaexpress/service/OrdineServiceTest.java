@@ -95,7 +95,7 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testCreaOrdine() {
+    public void creaOrdine_whenValid_thenOrdineReturned() {
         // Creazione del Cliente che la repository di cliente ritornerà
         Cliente clienteTrovato = creaNuovoCliente(1L, "Mario Mela");
 
@@ -122,7 +122,7 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testCreaOrdineClienteNonEsiste() {
+    public void creaOrdine_whenClienteDoesNotExist_thenNotFoundExceptionIsThrown() {
         // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
         RegistraOrdineDTO ordineDTO = creaNuovoOrdineDTO("123", List.of(new AggiungiPizzaAllOrdineDTO(1L, 2)));
 
@@ -134,7 +134,7 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testCreaOrdineSenzaPizze() {
+    public void creaOrdine_whenNoOrderedPizza_thenBadRequestExceptionIsThrown() {
         // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
         Cliente clienteTrovato = creaNuovoCliente(1L, "Marcello Muovileoni");
         RegistraOrdineDTO ordineDaCreare = creaNuovoOrdineDTO("123", null);
@@ -150,7 +150,7 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testCreaOrdineConPizzeInesistenti() {
+    public void creaOrdine_whenAPizzaInCollectionOrderPizzaDoesNotExist_thenNotFoundExceptionIsThrown() {
         // Creazione dei DTO dell'Ordine e del Rider per la chiamata del metodo testato
         RegistraOrdineDTO ordineDTO = creaNuovoOrdineDTO("123", List.of(new AggiungiPizzaAllOrdineDTO(1L, 2)));
 
@@ -193,7 +193,7 @@ public class OrdineServiceTest {
     }*/
 
     @Test
-    public void testCercaOrdineEsistente() {
+    public void cercaOrdine_whenExists_thenOrdineReturned() {
         // Creazione nuovo Ordine + Rider per il Cliente
         Rider riderOrdine = new Rider(30L, "Simone Dragoncelli");
         Ordine ordineCercato = creaOrdineEntity("123", riderOrdine, null);
@@ -216,7 +216,7 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testCercaOrdineInesistente() {
+    public void cercaOrdine_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         // Creazione del Cliente che la repository di cliente ritornerà
         Cliente clienteTrovato = creaNuovoCliente(124L, "Leandro Impazienza");
 
@@ -228,7 +228,7 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testTuttiGliOrdini() {
+    public void tuttiGliOrdini_thenAllOrdersReturned() {
         List<Ordine> tuttiGliOrdini = List.of(
                 creaOrdineEntity("N1 FRA", null, null),
                 creaOrdineEntity("N2 LDS", null, null)
@@ -244,7 +244,7 @@ public class OrdineServiceTest {
     }
 
     @Test
-    public void testAggiungiPizzaAllOrdine() {
+    public void aggiungiPizza_whenValid_thenPizzaIsAddedToTheOrder() {
         // DTO della pizza da aggiungere
         PizzaDTO pizzaCreataDTO = creaNuovaPizzaDTO(13L, "Diavola");
 
