@@ -32,19 +32,22 @@ public class OrdineServiceImpl implements OrdineService {
     @Autowired
     OrdineMapper mapper;
 
+    private void validaRegoleDiBusiness(RegistraOrdineDTO ordineDaValidare) {
+        // Controlla che il codice dell'ordine non sia duplicato
+        if (repositoryOrdine.existsById(ordineDaValidare.getCodice()))
+            throw new ConflictException("Esiste già un ordine con codice " + ordineDaValidare.getCodice());
+
+        // Controlla che l'ordine abbia almeno una pizza
+        if (ordineDaValidare.getPizzeOrdinate() == null || ordineDaValidare.getPizzeOrdinate().isEmpty())
+            throw new BadRequestException("L'ordine appena creato deve contenere almeno una pizza");
+    }
+
     @Override
     public OrdineDTO creaOrdine(Long idCliente, RegistraOrdineDTO nuovoOrdine) {
-        // Controlla che il codice dell'ordine non sia duplicato
-        if (repositoryOrdine.existsById(nuovoOrdine.getCodice()))
-            throw new ConflictException("Esiste già un ordine con codice " + nuovoOrdine.getCodice());
+        validaRegoleDiBusiness(nuovoOrdine);
 
         // Controlla che il cliente ordinante esista
         Cliente clienteOrditore = repositoryCliente.findByIdOrThrow(idCliente); // prendi l'entity in stato managed
-
-        // Controlla che l'ordine abbia almeno una pizza
-        if (nuovoOrdine.getPizzeOrdinate() == null || nuovoOrdine.getPizzeOrdinate().isEmpty()) {
-            throw new BadRequestException("L'ordine appena creato deve contenere almeno una pizza");
-        }
 
         // Visto che RegistraOrdineDTO ha solo gli id delle pizze dobbiamo fare un findById sulle pizze.
         // Tuttavia il mapper non puà fare il findById quindi metà della conversione deve esser fatta direttamente nel service
