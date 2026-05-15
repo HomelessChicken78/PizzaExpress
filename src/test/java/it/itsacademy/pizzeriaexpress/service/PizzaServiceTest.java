@@ -36,14 +36,21 @@ public class PizzaServiceTest {
                 1L, "Margherita", "Pomodoro, Mozzarella, Basilico", 9.00
         );
 
-        when(pizzaRepository.findById(1L)).thenReturn(Optional.of(nuovaEntityPizza));
-        assertEquals("Margherita", pizzaService.cercaPizza(1L).getNome());
+        when(pizzaRepository.findByIdOrThrow(1L)).thenReturn(nuovaEntityPizza);
+        assertDoesNotThrow(() -> pizzaService.cercaPizza(1L),
+                "La pizza non viene trovata anche quando esiste");
+        assertEquals("Margherita", pizzaService.cercaPizza(1L).getNome(),
+                "La pizza trovata non è uguale a quella salvata inizialmente");
     }
 
     @Test
     public void testCercaPizzaMaNonTrovata() {
-        when(pizzaRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> pizzaService.cercaPizza(1L));
+        when(pizzaRepository.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
+
+        // Verifiche
+        assertThrows(NotFoundException.class, () -> pizzaService.cercaPizza(1L),
+                "Mancata propagazione dell'exception"); // Rilancia l'exception
+        verify(pizzaRepository).findByIdOrThrow(1L);
     }
 
     @Test
@@ -77,14 +84,19 @@ public class PizzaServiceTest {
 
     @Test
     public void testEliminaPizzaRitornaPizza() {
-        when(pizzaRepository.findById(1L)).thenReturn(Optional.of(new Pizza(1L, "Margherita", "Pomodoro, Mozzarella", 7.50)));
+        when(pizzaRepository.findByIdOrThrow(1L)).thenReturn(
+                new Pizza(1L, "Margherita", "Pomodoro, Mozzarella", 7.50));
         assertEquals(1L, pizzaService.eliminaPizza(1L).getIdPizza());
     }
 
     @Test
     public void testEliminaMaNonEsiste() {
-        when(pizzaRepository.findById(123L)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> pizzaService.eliminaPizza(123L));
+        when(pizzaRepository.findByIdOrThrow(123L)).thenThrow(NotFoundException.class);
+
+        // Verifica che l'exception venga propagata
+        assertThrows(NotFoundException.class, () -> pizzaService.eliminaPizza(123L),
+                "La pizza viene cancellata anche se non esiste o l'eccezione non è lanciata correttamente");
+        verify((pizzaRepository)).findByIdOrThrow(any(Long.class));
     }
 
     @Test void testModificaPizza() {
@@ -93,11 +105,12 @@ public class PizzaServiceTest {
         PizzaDTO pizzaModificata = new PizzaDTO(93L, "Margherita", "Pomodoro, Mozzarella", 7.50);
         Pizza pizzaSalvata = new Pizza(idOriginale, "Margherita", "Pomodoro, Mozzarella", 7.50);
 
-        when(pizzaRepository.findById(idOriginale)).thenReturn(Optional.of(pizzaOriginale));
+        when(pizzaRepository.findByIdOrThrow(idOriginale)).thenReturn(pizzaOriginale);
         when(pizzaRepository.save(any(Pizza.class))).thenReturn(pizzaSalvata);
 
         PizzaDTO result = pizzaService.modificaPizza(idOriginale, pizzaModificata);
 
+        verify(pizzaRepository).findByIdOrThrow(idOriginale);
         assertEquals(idOriginale, result.getIdPizza());
         assertEquals("Margherita", result.getNome());
         assertEquals(7.5, result.getPrezzo());
