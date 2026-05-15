@@ -81,6 +81,46 @@ public class OrdineServiceImpl implements OrdineService {
     }
 
     @Override
+    public OrdinePrioritarioDTO creaOrdinePrioritario(Long idCliente, RegistraOrdinePrioritarioDTO nuovoOrdine) {
+        // TODO il metodo non registra correttamente il sovrapprezzo e le pizze
+        validaRegoleDiBusiness(nuovoOrdine);
+
+        // Controlla che il cliente ordinante esista
+        Cliente clienteOrditore = repositoryCliente.findByIdOrThrow(idCliente); // prendi l'entity in stato managed
+
+        // Visto che RegistraOrdineDTO ha solo gli id delle pizze dobbiamo fare un findById sulle pizze.
+        // Tuttavia il mapper non puà fare il findById quindi metà della conversione deve esser fatta direttamente nel service
+        // (il mapper può comunque occuparsi della conversione senza pizze)
+        OrdinePrioritarioDTO daSalvare = mapper.toCompleteOrdine(nuovoOrdine);
+        daSalvare.setPizzeOrdinate(new ArrayList<>());
+
+        for (AggiungiPizzaAllOrdineDTO pizzaOrdinata : nuovoOrdine.getPizzeOrdinate()) {
+            // Recuperiamo la pizza reale dal database (come DTO)
+            PizzaDTO pizzaTrovata = pizzaService.cercaPizza(pizzaOrdinata.getIdPizza());
+
+            // Colleghiamo la pizza presa al suo OrdinePizza
+            OrdinePizzaDTO op = new OrdinePizzaDTO();
+            op.setPizza(pizzaTrovata);
+            op.setQuantita(pizzaOrdinata.getQuantita());
+
+            // Colleghiamo all'ordine
+            daSalvare.getPizzeOrdinate().add(op);
+        }
+
+        OrdinePrioritario saved = repositoryOrdine.save(mapper.toEntityPrio(daSalvare)); // salva l'ordine, senza il suo cliente
+
+        clienteOrditore.getOrdini().add(saved); // collega il cliente al suo nuovo ordine
+
+        // Cerca il rider
+        if (nuovoOrdine.getRider() != null) {
+            Rider riderTrovato = repositoryRider.findByIdOrThrow(nuovoOrdine.getRider());
+            saved.setRider(riderTrovato);
+        }
+
+        return mapper.toDTO(saved);
+    }
+
+    @Override
     public OrdineDTO cercaOrdine(Long idCliente, String codiceOrdine) {
         // cerca il cliente
         Cliente clienteOrditore = repositoryCliente.findByIdOrThrow(idCliente);

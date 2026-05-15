@@ -47,4 +47,8 @@ public class OrdineController {
                                  @RequestBody IdRiderDTO idRider) {
         return ordineService.cambiaRider(idCliente, codiceOrdine, idRider.getIdRider());
     }
+
+    // TODO endpoint per aggiungere nuovi ordini prioritari
+    // TODO cambiare un ordine in prioritario
+    // TODO endpoint per ottenere solo ordini prio
 }
