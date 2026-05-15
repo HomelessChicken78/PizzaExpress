@@ -42,7 +42,7 @@ public class PizzaRepositoryTest {
     }
 
     @Test
-    public void testPizzaSave() {
+    public void save_whenValidEntity_thenEntityIsPersisted() {
         Pizza pizza = new Pizza();
         pizza.setNome("Margherita");
         pizza.setDescrizione("Pomodoro, Mozzarella, Basilico");
@@ -54,7 +54,7 @@ public class PizzaRepositoryTest {
     }
 
     @Test
-    public void testPizzaCancella() {
+    public void deleteById_whenExists_thenIsDeleted() {
 
         assertTrue(pizzaRepository.findById(1L).isPresent());
         pizzaRepository.deleteById(1L);
@@ -62,7 +62,7 @@ public class PizzaRepositoryTest {
     }
 
     @Test
-    public void testCercaPizza() {
+    public void findById_whenExists_thenIsReturned() {
         Pizza pizza = pizzaRepository.findById(1L).orElse(null);
 
         assertNotNull(pizza);
@@ -70,12 +70,12 @@ public class PizzaRepositoryTest {
     }
 
     @Test
-    public void testFindByIdOrThrow_trovato() {
+    public void findByIdOrThrow_whenExists_thenIsReturned() {
         assertDoesNotThrow(() -> pizzaRepository.findByIdOrThrow(1L), "Il metodo non ha trovato alcuna pizza anche se esiste");
     }
 
     @Test
-    public void testFindByIdOrThrow_non_trovato() {
+    public void findByIdOrThrow_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         assertThrows(NotFoundException.class, () -> pizzaRepository.findByIdOrThrow(23L),
                 "Il metodo ha trovato una pizza anche se non esiste o l'exception non è lanciata correttamente");
     }

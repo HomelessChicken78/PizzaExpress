@@ -27,7 +27,7 @@ public class OrdineRepositoryTest {
     private PizzaRepository pizzaRepository;
 
     @Test
-    public void testOrdineSave() {
+    public void save_whenValidEntity_thenEntityIsPersisted() {
         // Crea la pizza
         Pizza margherita = new Pizza();
         margherita.setNome("Margherita");
@@ -68,7 +68,7 @@ public class OrdineRepositoryTest {
     }
 
     @Test
-    public void testCancellaOrdine() {
+    public void deleteById_whenExists_thenIsDeleted() {
         // Crea l'ordine e le entità correlate (Pizza e OrdinePizza)
         Pizza margherita = new Pizza();
         margherita.setNome("Margherita");
@@ -102,7 +102,7 @@ public class OrdineRepositoryTest {
     }
 
     @Test
-    public void testCercaOrdine() {
+    public void findById_whenExists_thenIsReturned() {
         // Crea l'ordine e le entità correlate (Pizza e OrdinePizza)
         Pizza margherita = new Pizza();
         margherita.setNome("Margherita");
@@ -140,7 +140,7 @@ public class OrdineRepositoryTest {
     }
 
     @Test
-    public void testFindByIdOrThrow_trovato() {
+    public void findByIdOrThrow_whenExists_thenIsReturned() {
         // Crea l'ordine e le entità correlate (Pizza e OrdinePizza)
         Pizza margherita = new Pizza();
         margherita.setNome("Margherita");
@@ -178,7 +178,7 @@ public class OrdineRepositoryTest {
     }
 
     @Test
-    public void testFindByIdOrThrow_non_trovato() {
+    public void findByIdOrThrow_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         // Verifiche
         assertThrows(NotFoundException.class, () -> ordineRepository.findByIdOrThrow("ARM45JJ"));
     }

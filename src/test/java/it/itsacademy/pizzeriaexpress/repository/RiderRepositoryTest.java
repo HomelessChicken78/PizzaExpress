@@ -19,7 +19,7 @@ public class RiderRepositoryTest {
     private RiderRepository riderRepository;
 
     @Test
-    public void testRiderSave() {
+    public void save_whenValidEntity_thenEntityIsPersisted() {
         Rider rider = new Rider();
         rider.setNome("Francesco Giacomini");
 
@@ -30,7 +30,7 @@ public class RiderRepositoryTest {
     }
 
     @Test
-    public void testRiderCancella() {
+    public void deleteById_whenExists_thenIsDeleted() {
         Rider rider = new Rider();
         rider.setNome("Francesco Giacomini");
 
@@ -43,7 +43,7 @@ public class RiderRepositoryTest {
     }
 
     @Test
-    public void testCercaRider() {
+    public void findById_whenExists_thenIsReturned() {
         Rider rider = new Rider();
         rider.setNome("Francesco Giacomini");
 
@@ -55,7 +55,7 @@ public class RiderRepositoryTest {
     }
 
     @Test
-    public void testFindByIdOrThrow_trovato() {
+    public void findByIdOrThrow_whenExists_thenIsReturned() {
         Rider rider = new Rider();
         rider.setNome("Francesco Giacomini");
 
@@ -67,7 +67,7 @@ public class RiderRepositoryTest {
     }
 
     @Test
-    public void testFindByIdOrThrow_non_trovato() {
+    public void findByIdOrThrow_whenDoesNotExist_thenNotFoundExceptionIsThrown() {
         assertThrows(NotFoundException.class, () -> riderRepository.findByIdOrThrow(23L),
                 "Il metodo ha trovato un rider anche se non esiste o l'exception non è lanciata correttamente");
     }
