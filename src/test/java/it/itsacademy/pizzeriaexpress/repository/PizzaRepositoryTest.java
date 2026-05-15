@@ -1,6 +1,7 @@
 package it.itsacademy.pizzeriaexpress.repository;
 
 import it.itsacademy.pizzeriaexpress.entity.Pizza;
+import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,5 +67,16 @@ public class PizzaRepositoryTest {
 
         assertNotNull(pizza);
         assertEquals("Diavola", pizza.getNome());
+    }
+
+    @Test
+    public void testFindByIdOrThrow_trovato() {
+        assertDoesNotThrow(() -> pizzaRepository.findByIdOrThrow(1L), "Il metodo non ha trovato alcuna pizza anche se esiste");
+    }
+
+    @Test
+    public void testFindByIdOrThrow_non_trovato() {
+        assertThrows(NotFoundException.class, () -> pizzaRepository.findByIdOrThrow(23L),
+                "Il metodo ha trovato una pizza anche se non esiste o l'exception non è lanciata correttamente");
     }
 }

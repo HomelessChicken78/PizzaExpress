@@ -1,6 +1,7 @@
 package it.itsacademy.pizzeriaexpress.repository;
 
 import it.itsacademy.pizzeriaexpress.entity.Rider;
+import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -51,5 +52,23 @@ public class RiderRepositoryTest {
         assertNotNull(idNuovoRider, "SETUP FALLITO: Non è stato possibile generare un id");
 
         assertTrue(riderRepository.findById(idNuovoRider).isPresent(), "Il metodo findById non ha trovato alcun rider");
+    }
+
+    @Test
+    public void testFindByIdOrThrow_trovato() {
+        Rider rider = new Rider();
+        rider.setNome("Francesco Giacomini");
+
+        Rider savedRider = riderRepository.save(rider);
+        Long idNuovoRider = savedRider.getIdRider();
+        assertNotNull(idNuovoRider, "SETUP FALLITO: Non è stato possibile generare un id");
+
+        assertDoesNotThrow(() -> riderRepository.findByIdOrThrow(idNuovoRider), "Il metodo non ha trovato alcun rider anche se esiste");
+    }
+
+    @Test
+    public void testFindByIdOrThrow_non_trovato() {
+        assertThrows(NotFoundException.class, () -> riderRepository.findByIdOrThrow(23L),
+                "Il metodo ha trovato un rider anche se non esiste o l'exception non è lanciata correttamente");
     }
 }
