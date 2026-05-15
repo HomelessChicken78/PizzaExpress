@@ -6,7 +6,6 @@ import it.itsacademy.pizzeriaexpress.dto.RegistraClienteDTO;
 import it.itsacademy.pizzeriaexpress.dto.RegistraOrdineDTO;
 import it.itsacademy.pizzeriaexpress.entity.Cliente;
 import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
-import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.ClienteRepository;
 import it.itsacademy.pizzeriaexpress.mapper.ClienteMapper;
 import it.itsacademy.pizzeriaexpress.mapper.OrdineMapper;

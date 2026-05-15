@@ -2,7 +2,6 @@ package it.itsacademy.pizzeriaexpress.repository;
 
 import it.itsacademy.pizzeriaexpress.entity.Cliente;
 import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
-import org.aspectj.weaver.ast.Not;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
