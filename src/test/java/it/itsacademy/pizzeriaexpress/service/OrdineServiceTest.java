@@ -91,8 +91,9 @@ public class OrdineServiceTest {
     }
 
     private RegistraOrdinePrioritarioDTO creaNuovoOrdinePrioritarioDTO(Double sovrapprezzo, String codice, Collection<AggiungiPizzaAllOrdineDTO> pizzeOrdinate) {
-        return new RegistraOrdinePrioritarioDTO(sovrapprezzo)
+        return new RegistraOrdinePrioritarioDTO() // Se uso il builder dovrei usare il costruttore zero args
                 .builder()
+                .sovrapprezzo(sovrapprezzo)
                 .codice(codice)
                 .pizzeOrdinate(pizzeOrdinate)
                 .build();

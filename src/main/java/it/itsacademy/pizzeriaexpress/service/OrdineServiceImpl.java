@@ -82,7 +82,6 @@ public class OrdineServiceImpl implements OrdineService {
 
     @Override
     public OrdinePrioritarioDTO creaOrdinePrioritario(Long idCliente, RegistraOrdinePrioritarioDTO nuovoOrdine) {
-        // TODO il metodo non registra correttamente il sovrapprezzo e le pizze
         validaRegoleDiBusiness(nuovoOrdine);
 
         // Controlla che il cliente ordinante esista
