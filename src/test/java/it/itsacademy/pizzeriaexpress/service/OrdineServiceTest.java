@@ -128,6 +128,8 @@ public class OrdineServiceTest {
         // Verifiche
         assertNotNull(creato);
         assertEquals("468", creato.getCodice());
+        assertNotNull(creato.getRider(), "L'ordine non ha alcun rider anche se richiesto");
+        assertEquals("Lorenzo Purebirra", creato.getRider().getNome(), "Il nome del rider dell'ordine non è quello atteso");
     }
 
     @Test
