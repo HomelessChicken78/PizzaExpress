@@ -3,6 +3,7 @@ package it.itsacademy.pizzeriaexpress.repository;
 import it.itsacademy.pizzeriaexpress.entity.Ordine;
 import it.itsacademy.pizzeriaexpress.entity.OrdinePizza;
 import it.itsacademy.pizzeriaexpress.entity.Pizza;
+import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -65,7 +66,6 @@ public class OrdineRepositoryTest {
         assertNotNull(ordinePizzaSalvato.getPizza(), "L'ordine pizza non contiene alcuna pizza all'interno");
         assertEquals("Margherita", ordinePizzaSalvato.getPizza().getNome(), "La pizza nell'ordine pizza non si chiama margherita");
     }
-
 
     @Test
     public void testCancellaOrdine() {
@@ -137,5 +137,49 @@ public class OrdineRepositoryTest {
         assertNotNull(pizzaOrdinata, "L'ordine ritorna una lista di OrdinePizza, ma gli OrdinePizza hanno Pizza a null");
         assertNotNull(pizzaRepository.findById(pizzaOrdinata.getIdPizza()).orElse(null), "L'ordine contiene delle pizze inesistenti nel sistema");
 
+    }
+
+    @Test
+    public void testFindByIdOrThrow_trovato() {
+        // Crea l'ordine e le entità correlate (Pizza e OrdinePizza)
+        Pizza margherita = new Pizza();
+        margherita.setNome("Margherita");
+        margherita.setDescrizione("Molto buona");
+        margherita.setPrezzo(9.0);
+        Pizza savedPizza = pizzaRepository.saveAndFlush(margherita);
+        assertNotNull(savedPizza, "SETUP FALLITO: non è stato possibile salvare la pizza nel sistema");
+
+        OrdinePizza op = new OrdinePizza();
+        op.setQuantita(2);
+        op.setPizza(savedPizza);
+        Collection<OrdinePizza> pizzeOrdinate = new ArrayList<>();
+        pizzeOrdinate.add(op);
+
+        Ordine ordine = new Ordine();
+        ordine.setCodice("QI5");
+        ordine.setPizzeOrdinate(pizzeOrdinate);
+
+        ordineRepository.save(ordine);
+
+        // Verifiche
+        Ordine trovato = ordineRepository.findByIdOrThrow("QI5");
+        assertDoesNotThrow(() -> ordineRepository.findByIdOrThrow("QI5"), "La ricerca della pizza non è andata a buon fine");
+
+        OrdinePizza ordinePizza = trovato.getPizzeOrdinate()
+                .stream()
+                .findFirst()
+                .orElse(null);
+        assertNotNull(ordinePizza, "L'ordine non ritorna correttamente la lista delle pizze ordinate (OrdinePizza)");
+
+        Pizza pizzaOrdinata = ordinePizza.getPizza();
+        assertNotNull(pizzaOrdinata, "L'ordine ritorna una lista di OrdinePizza, ma gli OrdinePizza hanno Pizza a null");
+        assertNotNull(pizzaRepository.findById(pizzaOrdinata.getIdPizza()).orElse(null), "L'ordine contiene delle pizze inesistenti nel sistema");
+
+    }
+
+    @Test
+    public void testFindByIdOrThrow_non_trovato() {
+        // Verifiche
+        assertThrows(NotFoundException.class, () -> ordineRepository.findByIdOrThrow("ARM45JJ"));
     }
 }
