@@ -1,5 +1,5 @@
 # Esempio configurazione del file
 spring.application.name=PizzeriaExpress
-spring.datasource.url=jdbc:mysql://localhost:3306/example_db_test
+spring.datasource.url=dbc:h2:mem:example_db_test
 spring.datasource.username=my_user
 spring.datasource.password=example_password_123
