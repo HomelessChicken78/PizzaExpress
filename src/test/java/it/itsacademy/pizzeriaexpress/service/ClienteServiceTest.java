@@ -91,8 +91,8 @@ public class ClienteServiceTest {
         when(clienteRepository.findByIdOrThrow(any(Long.class))).thenThrow(NotFoundException.class);
 
         // Verifica
-        verify(clienteRepository).findByIdOrThrow(any(Long.class));
         assertThrows(NotFoundException.class, () -> clienteService.cercaCliente(87L)); // Eccezione propagata
+        verify(clienteRepository).findByIdOrThrow(any(Long.class));
     }
 
     @Test
