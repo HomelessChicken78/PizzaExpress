@@ -2,7 +2,6 @@ package it.itsacademy.pizzeriaexpress.service;
 
 import it.itsacademy.pizzeriaexpress.dto.PizzaDTO;
 import it.itsacademy.pizzeriaexpress.entity.Pizza;
-import it.itsacademy.pizzeriaexpress.exception.NotFoundException;
 import it.itsacademy.pizzeriaexpress.repository.PizzaRepository;
 import it.itsacademy.pizzeriaexpress.mapper.PizzaMapper;
 import jakarta.transaction.Transactional;
