@@ -152,7 +152,6 @@ public class OrdineServiceImpl implements OrdineService {
                 .toList();
     }
 
-    //TODO implementare test
     @Override
     public Collection<OrdineDTO> tuttiGliOrdiniNonPrioritari() {
         return mapper.toDTO(repositoryOrdine.findAll()
@@ -161,7 +160,6 @@ public class OrdineServiceImpl implements OrdineService {
                 .toList());
     }
 
-    //TODO implementare test
     @Override
     public Collection<OrdinePrioritarioDTO> tuttiGliOrdiniPrioritari() {
         return mapper.toDTO(repositoryOrdine.findAll()
