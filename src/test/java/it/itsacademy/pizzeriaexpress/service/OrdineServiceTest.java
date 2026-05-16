@@ -96,6 +96,7 @@ public class OrdineServiceTest {
                 .sovrapprezzo(sovrapprezzo)
                 .codice(codice)
                 .pizzeOrdinate(pizzeOrdinate)
+                .rider(1L)
                 .build();
     }
 
@@ -127,9 +128,40 @@ public class OrdineServiceTest {
 
         // Verifiche
         assertNotNull(creato);
+        assertNotNull(creato.getRider());
         assertEquals("468", creato.getCodice());
         assertNotNull(creato.getRider(), "L'ordine non ha alcun rider anche se richiesto");
         assertEquals("Lorenzo Purebirra", creato.getRider().getNome(), "Il nome del rider dell'ordine non è quello atteso");
+    }
+
+    @Test
+    public void creaOrdine_whenNoRiderPassed_thenOrdineReturnedWithoutRider() {
+        // Creazione del Cliente che la repository di cliente ritornerà
+        Cliente clienteTrovato = creaNuovoCliente(2L, "Luigi Pera");
+
+        // Creazione dell'OrdinePizza e della Pizza correlati
+        PizzaDTO margherita = creaNuovaPizzaDTO(12L, "Diavola");
+        AggiungiPizzaAllOrdineDTO op = new AggiungiPizzaAllOrdineDTO();
+        op.setQuantita(1);
+        op.setIdPizza(margherita.getIdPizza());
+        Collection<AggiungiPizzaAllOrdineDTO> pizzeOrdinate = new ArrayList<>();
+        pizzeOrdinate.add(op);
+
+        RegistraOrdineDTO ordineDaCreare = creaNuovoOrdineDTO("2200", pizzeOrdinate);
+        ordineDaCreare.setRider(null); // Metti l'id del Rider a null siccome il metodo creaNuovoOrdineDTO crea un rider
+
+        when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
+        when(clienteRepository.findByIdOrThrow(2L)).thenReturn(clienteTrovato);
+        // Non ci sta bisogno di fare lo stubbing del RiderRepository.findByIdOrThrow visto che non vi è un Rider
+
+        // Chiamata del metodo da testare + verifica che non lanci eccezioni
+        OrdineDTO creato = assertDoesNotThrow(() -> ordineService.creaOrdine(2L, ordineDaCreare));
+
+        // Verifiche
+        assertNotNull(creato);
+        // Non dobbiamo fare il verify never: nel caso il codice funziona tramite try catch fallirebbe il test
+        assertEquals("2200", creato.getCodice());
+        assertNull(creato.getRider(), "L'ordine ha alcun rider anche se non richiesto");
     }
 
     @Test
@@ -146,18 +178,51 @@ public class OrdineServiceTest {
         pizzeOrdinate.add(op);
 
         RegistraOrdinePrioritarioDTO ordineDaCreare = creaNuovoOrdinePrioritarioDTO(2.0,"468", pizzeOrdinate);
+        System.out.println(ordineDaCreare);
 
         when(ordineRepository.save(any(OrdinePrioritario.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
         when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
-        //when(riderRepository.findByIdOrThrow(1L)).thenReturn(new Rider(1L, "Lorenzo Purebirra"));
+        when(riderRepository.findByIdOrThrow(1L)).thenReturn(new Rider(1L, "Lorenzo Purebirra"));
 
         // Chiamata del metodo da testare
         OrdinePrioritarioDTO creato = ordineService.creaOrdinePrioritario(1L, ordineDaCreare);
 
         // Verifiche
         assertNotNull(creato);
+        assertNotNull(creato.getRider());
         assertEquals("468", creato.getCodice());
         assertEquals(2.0, creato.getSovrapprezzo());
+    }
+
+    @Test
+    public void creaOrdinePrioritario_whenNoRiderPassed_thenOrdineReturnedWithoutRider() {
+        // Creazione del Cliente che la repository di cliente ritornerà
+        Cliente clienteTrovato = creaNuovoCliente(77L, "Alessandro Quadrati");
+
+        // Creazione dell'OrdinePizza e della Pizza correlati
+        PizzaDTO margherita = creaNuovaPizzaDTO(15L, "Funghi");
+        AggiungiPizzaAllOrdineDTO op = new AggiungiPizzaAllOrdineDTO();
+        op.setQuantita(1);
+        op.setIdPizza(margherita.getIdPizza());
+        Collection<AggiungiPizzaAllOrdineDTO> pizzeOrdinate = new ArrayList<>();
+        pizzeOrdinate.add(op);
+
+        RegistraOrdinePrioritarioDTO ordineDaCreare = creaNuovoOrdinePrioritarioDTO(3.50, "2200", pizzeOrdinate);
+        ordineDaCreare.setRider(null); // Metti l'id del Rider a null siccome il metodo creaNuovoOrdineDTO crea un rider
+
+        when(ordineRepository.save(any(Ordine.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
+        when(clienteRepository.findByIdOrThrow(77L)).thenReturn(clienteTrovato);
+        // Non ci sta bisogno di fare lo stubbing del RiderRepository.findByIdOrThrow visto che non vi è un Rider
+
+        // Chiamata del metodo da testare + verifica che non lanci eccezioni
+        OrdinePrioritarioDTO creato = assertDoesNotThrow(() -> ordineService.creaOrdinePrioritario(77L, ordineDaCreare));
+
+        // Verifiche
+        assertNotNull(creato);
+        // Non dobbiamo fare il verify never: nel caso il codice funziona tramite try catch fallirebbe il test
+        assertEquals("2200", creato.getCodice());
+        assertNull(creato.getRider(), "L'ordine ha alcun rider anche se non richiesto");
+        assertEquals(3.50, creato.getSovrapprezzo());
     }
 
     @Test
