@@ -189,7 +189,6 @@ public class OrdineServiceTest {
         pizzeOrdinate.add(op);
 
         RegistraOrdinePrioritarioDTO ordineDaCreare = creaNuovoOrdinePrioritarioDTO(2.0,"468", pizzeOrdinate);
-        System.out.println(ordineDaCreare);
 
         when(ordineRepository.save(any(OrdinePrioritario.class))).thenAnswer(i -> i.getArgument(0)); // Restituisce esattamente lo stesso oggetto passato al metodo save
         when(clienteRepository.findByIdOrThrow(1L)).thenReturn(clienteTrovato);
@@ -359,19 +358,64 @@ public class OrdineServiceTest {
         assertNotNull(risultato);
         assertEquals(3, risultato.size());
 
-        Optional<OrdineDTO> ordinePrioritario = risultato
-                .stream()
-                .filter((ord) -> ord.getCodice().equals("N3 HGA"))
-                .findFirst();
-        assertTrue(ordinePrioritario.isPresent());
-        assertEquals(OrdinePrioritarioDTO.class, ordinePrioritario.get().getClass());
+        for (int i = 0; i < 3; i++) {
+            int finalI = i;
+            Ordine atteso = tuttiGliOrdini.get(finalI);
+            Optional<OrdineDTO> ord = risultato
+                    .stream()
+                    .filter((ordine) -> ordine.getCodice().equals(atteso.getCodice()))
+                    .findFirst();
+            assertTrue(ord.isPresent());
 
-        Optional<OrdineDTO> ordineNonPrioritario = risultato
-                .stream()
-                .filter((ord) -> ord.getCodice().equals("N2 LDS"))
-                .findFirst();
-        assertTrue(ordineNonPrioritario.isPresent());
-        assertNotEquals(OrdinePrioritarioDTO.class, ordineNonPrioritario.get().getClass());
+            System.out.println(tuttiGliOrdini.get(finalI));
+            if (!(OrdinePrioritario.class.equals(atteso.getClass())))
+                assertNotEquals(OrdinePrioritarioDTO.class, ord.get().getClass(),
+                        "L'ordine con codice " + ord.get().getCodice() + " non è un ordine non prioritario (normale)");
+            else
+                assertEquals(OrdinePrioritarioDTO.class, ord.get().getClass(),
+                        "L'ordine con codice " + ord.get().getCodice() + " non è un ordine non prioritario (normale)");
+
+            verify(ordineRepository, times(1)).findAll();
+        }
+    }
+
+    @Test
+    public void tuttiGliOrdiniNonPrioritari_thenAllOrdersNotPriorityReturned() {
+        List<Ordine> tuttiGliOrdini = List.of(
+                creaOrdineEntity("N1 FRA", new Rider(1L, "Anna Bianchi"), null),
+                creaOrdineEntity("N2 LDS", null, null)
+        );
+
+        when(ordineRepository.findAll()).thenReturn(tuttiGliOrdini);
+
+        Collection<OrdineDTO> risultato = ordineService.tuttiGliOrdini();
+
+        assertNotNull(risultato);
+        assertEquals(2, risultato.size());
+
+        for (OrdineDTO ord : risultato)
+            assertNotEquals(OrdinePrioritarioDTO.class, ord.getClass());
+
+        verify(ordineRepository, times(1)).findAll();
+    }
+
+    @Test
+    public void tuttiGliOrdiniPrioritari_thenAllOrdersPriorityReturned() {
+        List<Ordine> tuttiGliOrdini = List.of(
+                creaOrdinePrioritarioEntity(0.0, "N1 FRA", new Rider(1L, "Anna Bianchi"), null),
+                creaOrdinePrioritarioEntity(1.2, "N2 LDS", null, null),
+                creaOrdinePrioritarioEntity(3.0, "N3 OOP", null, null)
+        );
+
+        when(ordineRepository.findAll()).thenReturn(tuttiGliOrdini);
+
+        Collection<OrdineDTO> risultato = ordineService.tuttiGliOrdini();
+
+        assertNotNull(risultato);
+        assertEquals(3, risultato.size());
+
+        for (OrdineDTO ord : risultato)
+            assertEquals(OrdinePrioritarioDTO.class, ord.getClass());
 
         verify(ordineRepository, times(1)).findAll();
     }
