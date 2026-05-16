@@ -1,6 +1,7 @@
 package it.itsacademy.pizzeriaexpress.controller;
 
 import it.itsacademy.pizzeriaexpress.dto.*;
+import it.itsacademy.pizzeriaexpress.exception.BadRequestException;
 import it.itsacademy.pizzeriaexpress.service.OrdineService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +43,20 @@ public class OrdineController {
     }
 
     @GetMapping(path = "/ordini", produces = json)
-    public Collection<OrdineDTO> cercaTuttiGliOrdini() {
-        return ordineService.tuttiGliOrdini();
+    // La wildcard del generics ?extends è necessaria per dire al compiler che la collection può contenere
+    // sia OrdineDTO che le sue sottoclassi (OrdinePrioritarioDTO).
+    // Jackson ritorna lo schema corretto in automatico
+    public Collection<?extends OrdineDTO> cercaTuttiGliOrdini(String tipoOrdini) {
+        if (tipoOrdini == null)
+            return ordineService.tuttiGliOrdini();
+
+        return switch (tipoOrdini) {
+            case "normali" -> ordineService.tuttiGliOrdiniNonPrioritari();
+            case "prioritari" -> ordineService.tuttiGliOrdiniPrioritari();
+            default -> throw new BadRequestException("Valore non riconosciuto per tipoOrdine. " +
+                    "Inserire \"prioritari\" per ordini prioritari, \"normali\" per ordini non prioritari " +
+                    "oppure lasciare il campo vuoto per cercare tutti gli ordini");
+        };
     }
 
     @PatchMapping(path = "/clienti/{idCliente}/ordini/{codiceOrdine}", produces = json, consumes = json)
@@ -52,7 +65,5 @@ public class OrdineController {
         return ordineService.cambiaRider(idCliente, codiceOrdine, idRider.getIdRider());
     }
 
-    // TODO endpoint per aggiungere nuovi ordini prioritari
     // TODO cambiare un ordine in prioritario
-    // TODO endpoint per ottenere solo ordini prio
 }

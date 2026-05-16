@@ -10,6 +10,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.Collection;
+import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {OrdinePizzaMapper.class})
 public interface OrdineMapper {
@@ -28,4 +29,6 @@ public interface OrdineMapper {
     OrdinePrioritarioDTO toDTO(OrdinePrioritario entity);
 
     Collection<OrdineDTO> toDTO(Collection<Ordine> entities);
+
+    Collection<OrdinePrioritarioDTO> toDTO(List<OrdinePrioritario> entities);
 }

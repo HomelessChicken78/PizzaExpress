@@ -16,6 +16,10 @@ public interface OrdineService {
 
     Collection<OrdineDTO> tuttiGliOrdini();
 
+    Collection<OrdineDTO> tuttiGliOrdiniNonPrioritari();
+
+    Collection<OrdinePrioritarioDTO> tuttiGliOrdiniPrioritari();
+
     OrdineDTO aggiungiPizza(Long idCliente, String codiceOrdine, Long idPizza, Integer quantita);
 
     OrdineDTO cambiaRider(Long idCliente, String codiceOrdine, Long idRider);

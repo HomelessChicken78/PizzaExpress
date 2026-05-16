@@ -138,7 +138,27 @@ public class OrdineServiceImpl implements OrdineService {
 
     @Override
     public Collection<OrdineDTO> tuttiGliOrdini() {
+        // TODO questo dovrebbe ritornare i DTO completi
         return mapper.toDTO(repositoryOrdine.findAll());
+    }
+
+    //TODO implementare test
+    @Override
+    public Collection<OrdineDTO> tuttiGliOrdiniNonPrioritari() {
+        return mapper.toDTO(repositoryOrdine.findAll()
+                .stream()
+                .filter((ord) -> !(ord instanceof OrdinePrioritario))
+                .toList());
+    }
+
+    //TODO implementare test
+    @Override
+    public Collection<OrdinePrioritarioDTO> tuttiGliOrdiniPrioritari() {
+        return mapper.toDTO(repositoryOrdine.findAll()
+                .stream()
+                .filter((ord) -> ord instanceof OrdinePrioritario)
+                .map((ord) -> (OrdinePrioritario) ord)
+                .toList());
     }
 
     @Override
