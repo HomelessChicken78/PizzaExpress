@@ -20,6 +20,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -102,6 +103,16 @@ public class OrdineServiceTest {
 
     private Ordine creaOrdineEntity(String codice, Rider rider, Collection<OrdinePizza> pizzeOrdinate) {
         return new Ordine(codice, pizzeOrdinate, rider);
+    }
+
+    private OrdinePrioritario creaOrdinePrioritarioEntity(Double sovrapprezzo, String codice, Rider rider, Collection<OrdinePizza> pizzeOrdinate) {
+        return new OrdinePrioritario()
+                .builder()
+                .sovrapprezzo(sovrapprezzo)
+                .codice(codice)
+                .pizzeOrdinate(pizzeOrdinate)
+                .rider(rider)
+                .build();
     }
 
     @Test
@@ -337,7 +348,8 @@ public class OrdineServiceTest {
     public void tuttiGliOrdini_thenAllOrdersReturned() {
         List<Ordine> tuttiGliOrdini = List.of(
                 creaOrdineEntity("N1 FRA", null, null),
-                creaOrdineEntity("N2 LDS", null, null)
+                creaOrdineEntity("N2 LDS", null, null),
+                creaOrdinePrioritarioEntity(1.0, "N3 HGA", null, null)
         );
 
         when(ordineRepository.findAll()).thenReturn(tuttiGliOrdini);
@@ -345,7 +357,22 @@ public class OrdineServiceTest {
         Collection<OrdineDTO> risultato = ordineService.tuttiGliOrdini();
 
         assertNotNull(risultato);
-        assertEquals(2, risultato.size());
+        assertEquals(3, risultato.size());
+
+        Optional<OrdineDTO> ordinePrioritario = risultato
+                .stream()
+                .filter((ord) -> ord.getCodice().equals("N3 HGA"))
+                .findFirst();
+        assertTrue(ordinePrioritario.isPresent());
+        assertEquals(OrdinePrioritarioDTO.class, ordinePrioritario.get().getClass());
+
+        Optional<OrdineDTO> ordineNonPrioritario = risultato
+                .stream()
+                .filter((ord) -> ord.getCodice().equals("N2 LDS"))
+                .findFirst();
+        assertTrue(ordineNonPrioritario.isPresent());
+        assertNotEquals(OrdinePrioritarioDTO.class, ordineNonPrioritario.get().getClass());
+
         verify(ordineRepository, times(1)).findAll();
     }
 
