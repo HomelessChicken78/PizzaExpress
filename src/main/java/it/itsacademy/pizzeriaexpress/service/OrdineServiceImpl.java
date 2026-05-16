@@ -138,8 +138,18 @@ public class OrdineServiceImpl implements OrdineService {
 
     @Override
     public Collection<OrdineDTO> tuttiGliOrdini() {
-        // TODO questo dovrebbe ritornare i DTO completi
-        return mapper.toDTO(repositoryOrdine.findAll());
+        return repositoryOrdine.findAll()
+                .stream()
+                .map(ord -> {
+                    // Questo ci permette di fare il downcast al tipo corretto.
+                    // In questo modo gli ordini prioritari non vengono "retrocessi" in ordini normali
+                    // (e continuano a contenere gli attributi specializzati)
+                    if (ord instanceof OrdinePrioritario)
+                        return mapper.toDTO((OrdinePrioritario) ord);
+                    else
+                        return mapper.toDTO(ord);
+                })
+                .toList();
     }
 
     //TODO implementare test
