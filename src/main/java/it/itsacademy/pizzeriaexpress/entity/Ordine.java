@@ -2,6 +2,7 @@ package it.itsacademy.pizzeriaexpress.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Collection;
 
@@ -13,6 +14,7 @@ import java.util.Collection;
 @DiscriminatorColumn(name = "tipo_ordine", // definisce quale colonna a livello di db permette di distinguere a
                                             // quale classe java corrisponde
         discriminatorType = DiscriminatorType.STRING)
+@SuperBuilder // Necessario per permettere l'inizializzazione degli attributi nelle sottoclassi
 public class Ordine {
     @Id
     private String codice;
