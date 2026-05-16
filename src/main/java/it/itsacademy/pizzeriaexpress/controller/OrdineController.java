@@ -1,9 +1,6 @@
 package it.itsacademy.pizzeriaexpress.controller;
 
-import it.itsacademy.pizzeriaexpress.dto.AggiungiPizzaAllOrdineDTO;
-import it.itsacademy.pizzeriaexpress.dto.IdRiderDTO;
-import it.itsacademy.pizzeriaexpress.dto.OrdineDTO;
-import it.itsacademy.pizzeriaexpress.dto.RegistraOrdineDTO;
+import it.itsacademy.pizzeriaexpress.dto.*;
 import it.itsacademy.pizzeriaexpress.service.OrdineService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +21,13 @@ public class OrdineController {
     public OrdineDTO creaOrdine(@PathVariable Long idCliente, @RequestBody @Valid RegistraOrdineDTO nuovoOrdine) {
         return ordineService.creaOrdine(idCliente, nuovoOrdine);
     }
+
+    @PostMapping(path = "/clienti/{idCliente}/ordini/prioritari", consumes = json, produces = json)
+    @ResponseStatus(HttpStatus.CREATED)
+    public OrdineDTO creaOrdinePrioritario(@PathVariable Long idCliente, @RequestBody @Valid RegistraOrdinePrioritarioDTO nuovoOrdine) {
+        return ordineService.creaOrdinePrioritario(idCliente, nuovoOrdine);
+    }
+
 
     @GetMapping(path = "/clienti/{idCliente}/ordini/{codiceOrdine}", produces = json)
     public OrdineDTO cercaOrdine(@PathVariable Long idCliente, @PathVariable String codiceOrdine) {
