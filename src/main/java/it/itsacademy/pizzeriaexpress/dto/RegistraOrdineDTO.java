@@ -10,7 +10,7 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder // Necessario per permettere l'inizializzazione degli attributi nelle sottoclassi
 public class RegistraOrdineDTO {
     @NotNull(message = "Il codice è obbligatorio")
     @NotBlank(message = "Il codice è obbligatorio")
