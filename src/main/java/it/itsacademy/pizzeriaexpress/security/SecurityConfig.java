@@ -1,5 +1,6 @@
 package it.itsacademy.pizzeriaexpress.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +13,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Autowired
+    private ApiKeyFilter apiKeyFilter; // Mi faccio iniettare il filtro, in questo modo il filtro è gestito come un bean di spring.
+                        // Se usassi la new, non verrebbe gestito da spring e non farebbe l'iniezione della service nel filtro,
+                        // portando a una NullPointerException.
     /**
      * <p>Definisce la catena di filtri di sicurezza per la nostra applicazione.</p>
      * <ul>
@@ -58,7 +63,7 @@ public class SecurityConfig {
 
         // Aggiungiamo il filtro custom ApiKeyFilter
         // Così ogni request verso i percorsi protetti passa prima per la validazione della chiave API
-        http.addFilterBefore(new ApiKeyFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
