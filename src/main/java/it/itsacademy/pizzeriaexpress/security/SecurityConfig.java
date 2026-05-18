@@ -45,12 +45,12 @@ public class SecurityConfig {
         // Configuriamo quali richieste devono essere protette
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/clienti",      // il percorso principale
-                        "/clienti/**",   // tutti i sotto-endpoint
-                        "/ordini",       // percorso principale ordini
-                        "/ordini/**",    // sotto-endpoint ordini
-                        "/riders",       // percorso principale riders
-                        "/riders/**"     // sotto-endpoint riders
+                        "/api/clienti",      // il percorso principale
+                        "/api/clienti/**",   // tutti i sotto-endpoint
+                        "/api/ordini",       // percorso principale ordini
+                        "/api/ordini/**",    // sotto-endpoint ordini
+                        "/api/riders",       // percorso principale riders
+                        "/api/riders/**"     // sotto-endpoint riders
                 ).authenticated()  // richiedono autenticazione tramite API key
                 .anyRequest().permitAll() // tutti gli altri endpoint restano pubblici
         )
