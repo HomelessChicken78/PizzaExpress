@@ -40,13 +40,14 @@ public class AuthService {
      * Controlla la request HTTP e ritorna un oggetto Authentication se la chiave API è valida.
      *
      * @param request Oggetto HttpServletRequest che rappresenta la richiesta HTTP
-     * @return Authentication oggetto rappresentante l'utente autenticato.
-     * L'interfaccia Authentication rappresenta l'identità dell'utente all'interno di Spring Security.
-     * Contiene:
-     * - getPrincipal() -> chi è l'utente
-     * - getAuthorities() -> ruoli dell'utente
-     * - isAuthenticated() -> true/false
-     * - altre info per Spring Security
+     * @return Authentication - oggetto rappresentante l'utente autenticato.<br />
+     * L'interfaccia Authentication rappresenta l'identità dell'utente all'interno di Spring Security.<br />
+     * Contiene:<ul>
+     * <li>getPrincipal() -> chi è l'utente</li>
+     * <li>getAuthorities() -> ruoli dell'utente</li>
+     * <li>isAuthenticated() -> true/false</li>
+     * <li>altre info per Spring Security</li>
+     * </ul>
      * @throws BadCredentialsException se la chiave API è mancante o non valida
      */
     public Authentication getAuthentication(HttpServletRequest request) {
