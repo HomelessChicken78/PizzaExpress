@@ -59,6 +59,14 @@ public class ApiKeyFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
+        // If either header is missing, skip authentication processing
+        // and pass control down to the next filter in the security chain
+        // in this way the config will check if Authentication is required
+        /*if (apiKey == null || apiSecret == null) {
+            chain.doFilter(request, response);
+            return;
+        }*/
+
         try {
             // authService.getAuthentication() prende la request (che contiene l'header) legge gli header,
             // verifica se sono corretti e, se tutto è valido, restituisce un
