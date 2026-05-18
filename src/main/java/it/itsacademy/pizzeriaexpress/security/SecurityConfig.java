@@ -53,17 +53,17 @@ public class SecurityConfig {
                         "/riders/**"     // sotto-endpoint riders
                 ).authenticated()  // richiedono autenticazione tramite API key
                 .anyRequest().permitAll() // tutti gli altri endpoint restano pubblici
-        );
+        )
 
         // Stato della sessione: STATELESS perché l'autenticazione avviene a ogni request tramite API key
         // invece di creare una sessione.
-        http.sessionManagement(session -> session
+        .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        );
+        )
 
         // Aggiungiamo il filtro custom ApiKeyFilter
         // Così ogni request verso i percorsi protetti passa prima per la validazione della chiave API
-        http.addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class);
+        .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
