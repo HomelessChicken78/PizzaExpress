@@ -40,10 +40,10 @@ public class SecurityConfig {
         // - L'API è stateless (non usiamo sessioni né form HTML)
         // - L'autenticazione avviene tramite API key nell'header
         // -> il token CSRF non serve, quindi lo disabilitiamo.
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable)
 
         // Configuriamo quali richieste devono essere protette
-        http.authorizeHttpRequests(auth -> auth
+        .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/api/clienti",      // il percorso principale
                         "/api/clienti/**",   // tutti i sotto-endpoint
