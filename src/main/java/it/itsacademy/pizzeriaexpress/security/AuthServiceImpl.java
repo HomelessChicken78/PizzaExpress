@@ -29,8 +29,8 @@ public class AuthServiceImpl implements AuthService {
     // @Value serve a cercare un valore dall'application.properties
     public AuthServiceImpl(@Value("${api.key.header}") String headerApiKey,
                        @Value("${api.key}") String requestedApiKey,
-                       @Value("${api.secret}") String headerApiSecret,
-                       @Value("${api.secret.header}") String requestedApiSecret) {
+                       @Value("${api.secret.header}") String headerApiSecret,
+                       @Value("${api.secret}") String requestedApiSecret) {
         this.requestedApiKey = requestedApiKey;
         this.headerApiKey = headerApiKey;
         this.headerApiSecret = headerApiSecret;
