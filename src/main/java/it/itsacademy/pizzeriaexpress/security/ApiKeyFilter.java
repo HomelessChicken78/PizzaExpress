@@ -37,7 +37,7 @@ import java.io.IOException;
 public class ApiKeyFilter extends GenericFilterBean {
 
     @Autowired
-    private AuthService authService;
+    AuthService authService;
 
     /**
      * doFilter() è il metodo centrale del filtro. Un pò come test(T t) in Predicate.
