@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -89,7 +90,6 @@ public class AuthService {
         // questo è un comodo helper di Spring Security che crea una lista vuota di ruoli.
         // Significa che l'utente autenticato non ha ruoli/authorities assegnati.
 
-        return null;
-        //return new ApiKeyAuthentication(apiKey, AuthorityUtils.NO_AUTHORITIES);
+        return new ApiKeyAuthentication(apiKey, AuthorityUtils.NO_AUTHORITIES);
     }
 }
